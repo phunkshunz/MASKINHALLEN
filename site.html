@@ -92,6 +92,7 @@ section{padding-block:56px;border-top:1px solid var(--ln)}
 .pack{border:1px solid var(--ln);border-radius:6px;padding:20px;display:grid;gap:12px;align-content:start;background:var(--pn)}
 .pack.best{border-color:var(--or);box-shadow:inset 0 0 0 1px var(--or)}
 .pack .save{font-size:12px;color:var(--cy)}
+.pack .swish{justify-content:center}
 .pack .was{text-decoration:line-through;color:var(--dim);font-size:13px}
 
 /* om */
@@ -107,6 +108,19 @@ section{padding-block:56px;border-top:1px solid var(--ln)}
 .faq b{color:var(--tx)}
 .faq p{color:var(--mu)}
 footer{border-top:1px solid var(--ln);padding-block:28px 40px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--mu);font-size:12px}
+
+
+/* swish */
+.swish{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--cy2);background:transparent;color:var(--cy);font-weight:800;font-size:12px;letter-spacing:.06em;padding:12px 14px;border-radius:3px}
+.swish:hover{filter:brightness(1.15)}
+.modal{position:fixed;inset:0;z-index:20;background:rgba(10,11,12,.86);display:grid;place-items:center;padding:16px}
+.mbox{background:var(--pn);border:1px solid var(--cy2);border-radius:6px;max-width:460px;width:100%;padding:22px;display:grid;gap:14px}
+.mbox h3{color:var(--cy)}
+.mrow{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:10px;align-items:center;border-top:1px solid var(--ln);padding-top:10px}
+.mrow b{font-size:16px;word-break:break-all}
+.copy{background:var(--rs);border:1px solid var(--ln2);border-radius:3px;padding:6px 9px;font-size:11px}
+.mbox ol{margin:0;padding-left:18px;display:grid;gap:4px;color:var(--mu);font-size:13px}
+.mclose{justify-self:end;background:transparent;border:1px solid var(--ln2);border-radius:3px;padding:8px 12px;font-size:12px}
 
 @media (max-width:860px){
   .machine,.about{grid-template-columns:minmax(0,1fr)}
@@ -268,6 +282,24 @@ footer{border-top:1px solid var(--ln);padding-block:28px 40px;display:flex;justi
   </footer>
 </main>
 
+<div class="modal" id="swishModal" hidden role="dialog" aria-modal="true" aria-labelledby="swTitle">
+  <div class="mbox">
+    <h3 id="swTitle">PAY WITH SWISH</h3>
+    <p style="color:var(--mu);font-size:13px">For buyers in Sweden with a Swedish bank account. Card and PayPal work everywhere through the regular Buy button.</p>
+    <div class="mrow"><span class="lbl">Product</span><b id="swProd"></b><span></span></div>
+    <div class="mrow"><span class="lbl">Amount</span><b id="swAmt"></b><button class="copy" data-copy="swAmt">Copy</button></div>
+    <div class="mrow"><span class="lbl">Number</span><b id="swNum"></b><button class="copy" data-copy="swNum">Copy</button></div>
+    <div class="mrow"><span class="lbl">Message</span><b id="swMsg"></b><button class="copy" data-copy="swMsg">Copy</button></div>
+    <ol>
+      <li>Open Swish on your phone.</li>
+      <li>Enter the number and the amount.</li>
+      <li>Write the product name and your email in the message.</li>
+      <li>You get the download link by email, usually within 24 hours.</li>
+    </ol>
+    <button class="mclose" id="swClose">Close</button>
+  </div>
+</div>
+
 <script>
 "use strict";
 /* ===== Butikslänkar: fylls i när Payhip är uppsatt ===== */
@@ -276,6 +308,40 @@ document.querySelectorAll("[data-buy]").forEach(a => {
   const url = SHOP[a.dataset.buy];
   if (url) { a.href = url; a.target = "_blank"; a.rel = "noopener"; }
   else { a.classList.remove("solid"); a.classList.add("soon"); a.textContent = "Coming soon"; a.removeAttribute("href"); a.setAttribute("aria-disabled", "true"); }
+});
+
+
+/* ===== Swish direkt till telefonen (bara Sverige) ===== */
+const SWISH = {
+  number: "",   // ditt Swish-nummer, t.ex. "070 123 45 67"
+  sek: { betong: 449, armering: 449, fukt: 219, betongFukt: 549, armeringFukt: 549, alla: 799 },
+  names: { betong: "BETONG", armering: "ARMERING", fukt: "FUKT", betongFukt: "BETONG + FUKT", armeringFukt: "ARMERING + FUKT", alla: "MASKINHALLEN" },
+};
+const swModal = document.getElementById("swishModal");
+document.querySelectorAll("[data-buy]").forEach(a => {
+  const key = a.dataset.buy, b = document.createElement("button");
+  b.className = "swish"; b.type = "button"; b.textContent = "Swish · " + SWISH.sek[key] + " kr";
+  b.onclick = () => {
+    document.getElementById("swProd").textContent = SWISH.names[key];
+    document.getElementById("swAmt").textContent = SWISH.sek[key] + " kr";
+    document.getElementById("swNum").textContent = SWISH.number || "Coming soon";
+    document.getElementById("swMsg").textContent = SWISH.names[key] + " your@email.com";
+    swModal.hidden = false;
+    document.getElementById("swClose").focus();
+  };
+  a.insertAdjacentElement("afterend", b);
+});
+document.getElementById("swClose").onclick = () => { swModal.hidden = true; };
+swModal.addEventListener("click", e => { if (e.target === swModal) swModal.hidden = true; });
+document.addEventListener("keydown", e => { if (e.key === "Escape") swModal.hidden = true; });
+swModal.querySelectorAll("[data-copy]").forEach(btn => btn.onclick = () => {
+  const el = document.getElementById(btn.dataset.copy);
+  let text = el.textContent;
+  if (btn.dataset.copy === "swAmt") text = text.replace(/[^0-9]/g, "");
+  if (btn.dataset.copy === "swNum") text = text.replace(/\s/g, "");
+  const done = () => { btn.textContent = "Copied"; setTimeout(() => btn.textContent = "Copy", 1400); };
+  try { navigator.clipboard.writeText(text).then(done, () => { getSelection().selectAllChildren(el); }); }
+  catch (e) { getSelection().selectAllChildren(el); }
 });
 
 /* ===== Ljudmotorn: delas av alla tre demona ===== */
