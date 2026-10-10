@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MASKINHALLEN</title>
+<meta name="description" content="BETONG, ARMERING och FUKT: techno-plugins för macOS från MASKINHALLEN. Testa dem direkt i webbläsaren.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=JetBrains+Mono:wght@400;600;800&display=swap">
+<style>
+/* Layout: smal mittkolumn. Hero med jättelik ordmärkning och varningsrand, sedan tre maskiner (text + spelbar demo), paket, om, frågor. Ett medvetet mörkt tema: samma betong, natriumorange och kalla cyan som pluginen. */
+:root{
+  color-scheme:dark;
+  --bg:#121314; --pn:#1a1c1e; --rs:#232527; --ln:#2c2f32; --ln2:#3a3e42;
+  --tx:#d9d6cf; --mu:#8b8e91; --dim:#5c5f62;
+  --or:#ff8a1f; --or2:#c96a16; --cy:#4fd1e0; --cy2:#2ea7b5; --gr:#b9b6ae;
+  --disp:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--tx)}
+body{font-family:var(--mono);font-size:14px;line-height:1.6;padding:0 16px;padding-block:0}
+a{color:var(--or)}
+button{font-family:var(--mono);color:var(--tx);cursor:pointer}
+:focus-visible{outline:2px solid var(--cy);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto}
+.lbl{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mu)}
+h2{font-family:var(--disp);font-weight:900;font-size:clamp(36px,6vw,56px);line-height:.95;margin:0;letter-spacing:.01em;text-wrap:balance}
+h3{font-family:var(--disp);font-weight:900;font-size:26px;margin:0;letter-spacing:.02em}
+p{margin:0;max-width:62ch}
+
+/* topp */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--ln)}
+.top .wrap{display:flex;align-items:center;gap:20px;padding-block:12px;flex-wrap:wrap}
+.brand{font-family:var(--disp);font-weight:900;font-size:22px;letter-spacing:.04em;color:var(--or);text-decoration:none}
+.top nav{display:flex;gap:18px;flex-wrap:wrap;margin-left:auto}
+.top nav a{color:var(--tx);text-decoration:none;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.top nav a:hover{color:var(--or)}
+
+/* hero */
+.stripe{height:14px;background:repeating-linear-gradient(-45deg,var(--or) 0 14px,var(--bg) 14px 28px);border-radius:2px}
+.hero{display:grid;gap:22px;padding-block:44px 56px}
+.hero .word{font-family:var(--disp);font-weight:900;font-size:clamp(56px,14.5vw,184px);line-height:.82;letter-spacing:-.01em;color:var(--tx);margin:0;word-break:break-word}
+.hero .word span{color:var(--or)}
+.hero .lead{font-size:clamp(15px,1.8vw,18px);max-width:58ch}
+.ctas{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--or);background:transparent;color:var(--or);font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;padding:13px 18px;border-radius:3px;text-decoration:none}
+.btn.solid{background:var(--or);color:#1a1209}
+.btn:hover{filter:brightness(1.12)}
+.btn.soon{border-color:var(--ln2);color:var(--mu);cursor:default}
+.launch{display:inline-block;border:1px dashed var(--cy2);color:var(--cy);font-size:12px;padding:6px 10px;border-radius:3px}
+.facts{display:flex;gap:28px;flex-wrap:wrap;border-top:1px solid var(--ln);padding-top:18px}
+.facts div{display:grid}
+.facts b{font-family:var(--disp);font-size:30px;font-weight:900;line-height:1}
+
+/* maskiner */
+section{padding-block:56px;border-top:1px solid var(--ln)}
+.sechead{display:grid;gap:10px;margin-bottom:34px}
+.machine{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.25fr);gap:32px;align-items:start;padding-block:30px}
+.machine+.machine{border-top:1px dashed var(--ln)}
+.mtext{display:grid;gap:14px;min-width:0}
+.mname{font-family:var(--disp);font-weight:900;font-size:clamp(54px,8vw,84px);line-height:.85;color:var(--or)}
+.mname.cy{color:var(--cy)}
+.mname.gr{color:var(--gr)}
+.kind{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
+.mtext ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.mtext li::marker{color:var(--or)}
+.buy{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:6px}
+.price{font-family:var(--disp);font-weight:900;font-size:42px;line-height:1}
+.price small{font-family:var(--mono);font-size:12px;font-weight:400;color:var(--mu);margin-left:6px}
+
+/* demo */
+.demo{background:var(--pn);border:1px solid var(--ln);border-radius:6px;padding:16px;display:grid;gap:14px;min-width:0}
+.dtop{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.play{background:var(--or);border:0;color:#1a1209;font-weight:800;font-size:12px;letter-spacing:.1em;padding:11px 16px;border-radius:3px;min-width:104px}
+.play.on{background:var(--cy)}
+.presets{display:flex;gap:6px;flex-wrap:wrap}
+.chip{background:var(--rs);border:1px solid var(--ln2);border-radius:3px;padding:7px 10px;font-size:11px;font-weight:600}
+.chip.on{background:var(--or);border-color:var(--or);color:#1a1209}
+.chip.cy.on{background:var(--cy);border-color:var(--cy)}
+.dice{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--or);color:var(--or);font-weight:800;font-size:11px;padding:7px 10px;border-radius:3px}
+.grid{width:100%;display:block;background:#0f1011;border:1px solid var(--ln);border-radius:4px}
+.knobs{display:flex;gap:4px 10px;flex-wrap:wrap;align-items:flex-start}
+.knob{display:grid;justify-items:center;gap:1px;width:74px;touch-action:none;user-select:none;-webkit-user-select:none;cursor:ns-resize;border-radius:4px}
+.knob svg{width:50px;height:50px}
+.knob .kt{fill:none;stroke:var(--ln);stroke-width:5;stroke-linecap:round}
+.knob .kv{fill:none;stroke:var(--kc,var(--or));stroke-width:5;stroke-linecap:round}
+.knob .kb{fill:var(--rs);stroke:var(--ln2)}
+.knob .kp{stroke:var(--tx);stroke-width:2.5;stroke-linecap:round}
+.knob .kl{font-size:9.5px;letter-spacing:.12em;color:var(--mu);text-align:center}
+.knob .kn{font-size:11px;font-weight:800;font-variant-numeric:tabular-nums}
+.dnote{font-size:11.5px;color:var(--mu)}
+.ab{margin-left:auto;display:flex;gap:6px;align-items:center}
+
+/* paket */
+.packs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.pack{border:1px solid var(--ln);border-radius:6px;padding:20px;display:grid;gap:12px;align-content:start;background:var(--pn)}
+.pack.best{border-color:var(--or);box-shadow:inset 0 0 0 1px var(--or)}
+.pack .save{font-size:12px;color:var(--cy)}
+.pack .was{text-decoration:line-through;color:var(--dim);font-size:13px}
+
+/* om */
+.about{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:36px}
+.about .big{font-family:var(--disp);font-weight:900;font-size:clamp(40px,7vw,76px);line-height:.9}
+.about .big span{color:var(--or)}
+.about .body{display:grid;gap:16px;font-size:15.5px}
+.about .sig{color:var(--or);font-weight:800;letter-spacing:.1em}
+
+/* frågor */
+.faq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 36px}
+.faq div{display:grid;gap:6px}
+.faq b{color:var(--tx)}
+.faq p{color:var(--mu)}
+footer{border-top:1px solid var(--ln);padding-block:28px 40px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--mu);font-size:12px}
+
+@media (max-width:860px){
+  .machine,.about{grid-template-columns:minmax(0,1fr)}
+  .packs{grid-template-columns:minmax(0,1fr)}
+  .faq{grid-template-columns:minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#start">MASKINHALLEN</a>
+    <nav>
+      <a href="#maskiner">Maskiner</a>
+      <a href="#paket">Paket</a>
+      <a href="#om">Om</a>
+      <a href="#fragor">Frågor</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="start">
+  <div class="hero">
+    <div class="stripe" aria-hidden="true"></div>
+    <span class="lbl">VST3 · AU · macOS · Bitwig, Ableton, Logic</span>
+    <h1 class="word">MASKIN<span>HALLEN</span></h1>
+    <p class="lead">Tre techno-maskiner byggda i ett båtvarv. Trummor som snubblar i sned takt, syntar som trasslar ihop sig, och en effekt som får hela golvet att svettas. Testa dem här i webbläsaren innan du köper.</p>
+    <div class="ctas">
+      <a class="btn solid" href="#maskiner">▶ Testa demona</a>
+      <a class="btn" href="#paket">Hela Maskinhallen · 69 €</a>
+      <span class="launch">Lansering: −30 % första månaden</span>
+    </div>
+    <div class="facts">
+      <div><b>3</b><span class="lbl">maskiner</span></div>
+      <div><b>103</b><span class="lbl">egna ljud i BETONG</span></div>
+      <div><b>1–32</b><span class="lbl">steg per spår</span></div>
+      <div><b>0</b><span class="lbl">prenumerationer</span></div>
+    </div>
+  </div>
+
+  <section id="maskiner">
+    <div class="sechead">
+      <span class="lbl">Maskinerna</span>
+      <h2>Lyssna innan du köper.</h2>
+      <p>Varje demo har fem presets och några av rattarna. Fullversionerna har allt. Tryck Spela och vrid. Dra rattarna upp och ner.</p>
+    </div>
+
+    <article class="machine" id="betong">
+      <div class="mtext">
+        <div class="kind">Techno-sampler · trummaskin</div>
+        <div class="mname">BETONG</div>
+        <p>Hackar upp ljud och gör skeva, polyrytmiska beats. Åtta spår med egen längd och takt som glider mot varandra. Rumble under allt.</p>
+        <ul>
+          <li>16 pads, 103 egna ljud i 24-bit</li>
+          <li>8-spårs sequencer: euklid, ratchet, chans</li>
+          <li>Techno-filter, dub-delay, rumble och stutter</li>
+          <li>12 kit, 50 mönster, 50 effekt-presets</li>
+        </ul>
+        <div class="buy"><span class="price">39 €</span><a class="btn solid" data-buy="betong" href="#paket">Köp BETONG</a></div>
+      </div>
+      <div class="demo" data-demo="betong"></div>
+    </article>
+
+    <article class="machine" id="armering">
+      <div class="mtext">
+        <div class="kind">Techno-synt · fyra syntspår</div>
+        <div class="mname cy">ARMERING</div>
+        <p>Två basar, en stab och en lead. Basgångarna snurrar ihop sig, ramlar in och ur takt och trasslar sedan ut sig igen. Inga trummor, bara syntar.</p>
+        <ul>
+          <li>Såg, fyrkant, puls, reese, supersåg, FM, metall och sync</li>
+          <li>Acid-filter med accent och slide</li>
+          <li>Ur takt, trassel och reda ut</li>
+          <li>9 ljud, 8 mönster, 7 rattpresets</li>
+        </ul>
+        <div class="buy"><span class="price">39 €</span><a class="btn solid" data-buy="armering" href="#paket">Köp ARMERING</a></div>
+      </div>
+      <div class="demo" data-demo="armering"></div>
+    </article>
+
+    <article class="machine" id="fukt">
+      <div class="mtext">
+        <div class="kind">Techno-effekt · rumble och sväng</div>
+        <div class="mname gr">FUKT</div>
+        <p>Läggs på kanalen efter synten. Krossar ljudet, hackar det i sned takt, kastar det i ekot och låter rumblen andas. Skevt, men landar alltid på ettan.</p>
+        <ul>
+          <li>Gruskross: bas, mellan och topp krossas var för sig</li>
+          <li>Sex euklidiska effektspår med häng och swing</li>
+          <li>Armeringsnätet: obalans som aldrig spårar ur</li>
+          <li>Rumble, dub-eko, pump och rörelse</li>
+        </ul>
+        <div class="buy"><span class="price">19 €</span><a class="btn solid" data-buy="fukt" href="#paket">Köp FUKT</a></div>
+      </div>
+      <div class="demo" data-demo="fukt"></div>
+    </article>
+  </section>
+
+  <section id="paket">
+    <div class="sechead">
+      <span class="lbl">Paket</span>
+      <h2>Köp ihop, spara mer.</h2>
+    </div>
+    <div class="packs">
+      <div class="pack">
+        <h3>BETONG + FUKT</h3>
+        <p>Trummorna och effekten som får dem att svettas.</p>
+        <div><span class="was">58 €</span></div>
+        <span class="price">49 €</span>
+        <span class="save">Du sparar 9 €</span>
+        <a class="btn solid" data-buy="betongFukt" href="#paket">Köp paketet</a>
+      </div>
+      <div class="pack best">
+        <span class="lbl" style="color:var(--or)">Bäst värde</span>
+        <h3>HELA MASKINHALLEN</h3>
+        <p>BETONG, ARMERING och FUKT. Allt som behövs för ett fuktigt betonggolv.</p>
+        <div><span class="was">97 €</span></div>
+        <span class="price">69 €</span>
+        <span class="save">Du sparar 28 €</span>
+        <a class="btn solid" data-buy="alla" href="#paket">Köp alla tre</a>
+      </div>
+      <div class="pack">
+        <h3>ARMERING + FUKT</h3>
+        <p>Synten och effekten, på samma kanal.</p>
+        <div><span class="was">58 €</span></div>
+        <span class="price">49 €</span>
+        <span class="save">Du sparar 9 €</span>
+        <a class="btn solid" data-buy="armeringFukt" href="#paket">Köp paketet</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="om">
+    <div class="about">
+      <div class="big">Byggt i ett <span>båtvarv.</span></div>
+      <div class="body">
+        <p>På 90-talet låg Stockholms fetaste technoklubb i ett skramlande båtvarv. Den hette <b style="color:var(--or)">Docklands</b>.</p>
+        <p>Där lärde jag mig hur techno ska kännas: basen som får plåten att skramla, golvet som svettas, och rytmen som hänger efter, snubblar och ändå alltid landar på ettan.</p>
+        <p>Någon sa att min musik låter som ett fuktigt betonggolv. Det tog jag som ett beröm.</p>
+        <p><b>BETONG, ARMERING och FUKT</b> är byggda i Maskinhallen för att låta som det golvet.</p>
+        <span class="sig">MASKINHALLEN</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="fragor">
+    <div class="sechead"><span class="lbl">Frågor</span><h2>Bra att veta.</h2></div>
+    <div class="faq">
+      <div><b>Vad krävs?</b><p>En Mac med macOS 11 Big Sur eller nyare, Intel eller Apple Silicon. Pluginen finns som VST3 och AU och funkar i Bitwig, Ableton Live, Logic och andra DAW:ar som läser VST3 eller AU.</p></div>
+      <div><b>Hur installerar jag?</b><p>Efter köpet får du en zip-fil. Packa upp den och kör installera-skriptet. Det tar under en minut. Sedan söker du upp pluginet i din DAW.</p></div>
+      <div><b>Låter demon som pluginet?</b><p>Demon är en skiss som spelas i webbläsaren, med fem presets och några rattar. Pluginen har fler spår, fler rattar, bättre filter och översamplad distorsion, så de låter tyngre.</p></div>
+      <div><b>Får jag uppdateringar?</b><p>Ja. Nya versioner av det du köpt är gratis.</p></div>
+      <div><b>Finns det för Windows?</b><p>Inte än. Just nu bara macOS.</p></div>
+      <div><b>Hur betalar jag?</b><p>Med kort eller PayPal i kassan. Moms räknas ut automatiskt efter var du bor.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>MASKINHALLEN · byggt i ett båtvarv</span>
+    <span>BETONG · ARMERING · FUKT</span>
+  </footer>
+</main>
+
+<script>
+"use strict";
+/* ===== Butikslänkar: fylls i när Payhip är uppsatt ===== */
+const SHOP = { betong: "", armering: "", fukt: "", betongFukt: "", armeringFukt: "", alla: "" };
+document.querySelectorAll("[data-buy]").forEach(a => {
+  const url = SHOP[a.dataset.buy];
+  if (url) { a.href = url; a.target = "_blank"; a.rel = "noopener"; }
+  else { a.classList.remove("solid"); a.classList.add("soon"); a.textContent = "Snart i butiken"; a.removeAttribute("href"); a.setAttribute("aria-disabled", "true"); }
+});
+
+/* ===== Ljudmotorn: delas av alla tre demona ===== */
+let ctx = null, noiseBuf, master, masterLP, out, echoIn, echoOut, dL, dR, fb, aLP, aHP, rumbleIn, rumbleOut, rumbleDuck;
+let fuktIn, krossShape, gateG, jerkF, fuktWet, fuktDry, fuktEcho, fuktRumble;
+const curves = {};
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const mtof = m => 440 * Math.pow(2, (m - 69) / 12);
+const PHRYG = [0, 1, 3, 5, 7, 8, 10];
+const deg = d => { const n = PHRYG.length, o = Math.floor(d / n); return PHRYG[((d % n) + n) % n] + 12 * o; };
+const ROOT = 5; // F
+
+function tanhCurve(k) {
+  const key = k.toFixed(2); if (curves[key]) return curves[key];
+  const n = 2048, c = new Float32Array(n), nm = Math.tanh(k);
+  for (let i = 0; i < n; i++) { const x = i / (n - 1) * 2 - 1; c[i] = Math.tanh(k * x) / nm; }
+  return curves[key] = c;
+}
+function makeIR(sec) {
+  const len = Math.floor(ctx.sampleRate * sec), b = ctx.createBuffer(2, len, ctx.sampleRate);
+  for (let c = 0; c < 2; c++) { const d = b.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.6); }
+  return b;
+}
+function initAudio() {
+  if (ctx) return;
+  ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const sr = ctx.sampleRate;
+  noiseBuf = ctx.createBuffer(1, sr * 2, sr);
+  const nd = noiseBuf.getChannelData(0); for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
+
+  // master: gott om headroom, mjuk komp och mjukt tak
+  master = ctx.createGain(); master.gain.value = 0.5;
+  masterLP = ctx.createBiquadFilter(); masterLP.type = "lowpass"; masterLP.frequency.value = 20000; masterLP.Q.value = 0.5;
+  const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -14; comp.ratio.value = 3; comp.attack.value = 0.008; comp.release.value = 0.15;
+  const ceil = ctx.createWaveShaper(); ceil.curve = tanhCurve(1.2);
+  out = ctx.createGain(); out.gain.value = 0.85;
+  master.connect(masterLP).connect(comp).connect(ceil).connect(out).connect(ctx.destination);
+
+  // dub-eko
+  echoIn = ctx.createGain(); aHP = ctx.createBiquadFilter(); aHP.type = "highpass"; aHP.frequency.value = 300;
+  aLP = ctx.createBiquadFilter(); aLP.type = "lowpass"; aLP.frequency.value = 2600;
+  dL = ctx.createDelay(3); dR = ctx.createDelay(3); fb = ctx.createGain(); fb.gain.value = 0.55; echoOut = ctx.createGain(); echoOut.gain.value = 0.6;
+  const pL = ctx.createStereoPanner(), pR = ctx.createStereoPanner(); pL.pan.value = -0.7; pR.pan.value = 0.7;
+  echoIn.connect(aHP).connect(aLP).connect(dL); dL.connect(pL).connect(echoOut); dL.connect(dR); dR.connect(pR).connect(echoOut); dR.connect(fb).connect(aHP);
+  echoOut.connect(master);
+
+  // rumble: reverb -> distorsion -> lowpass, duckas av kicken
+  rumbleIn = ctx.createGain();
+  const conv = ctx.createConvolver(); conv.buffer = makeIR(3.2);
+  const rsh = ctx.createWaveShaper(); rsh.curve = tanhCurve(4);
+  const r1 = ctx.createBiquadFilter(), r2 = ctx.createBiquadFilter(); r1.type = r2.type = "lowpass"; r1.frequency.value = r2.frequency.value = 120;
+  const rhp = ctx.createBiquadFilter(); rhp.type = "highpass"; rhp.frequency.value = 30;
+  rumbleOut = ctx.createGain(); rumbleOut.gain.value = 0.5; rumbleDuck = ctx.createGain();
+  rumbleIn.connect(conv).connect(rsh).connect(r1).connect(r2).connect(rhp).connect(rumbleOut).connect(rumbleDuck).connect(master);
+
+  // FUKT-kedjan
+  fuktIn = ctx.createGain();
+  krossShape = ctx.createWaveShaper(); krossShape.curve = tanhCurve(1); krossShape.oversample = "2x";
+  const krossMake = ctx.createGain(); krossMake.gain.value = 1;
+  gateG = ctx.createGain();
+  jerkF = ctx.createBiquadFilter(); jerkF.type = "lowpass"; jerkF.frequency.value = 18000; jerkF.Q.value = 6;
+  fuktWet = ctx.createGain(); fuktDry = ctx.createGain(); fuktDry.gain.value = 0;
+  fuktEcho = ctx.createGain(); fuktEcho.gain.value = 0; fuktRumble = ctx.createGain(); fuktRumble.gain.value = 0;
+  fuktIn.connect(krossShape).connect(krossMake).connect(gateG).connect(jerkF).connect(fuktWet).connect(master);
+  fuktIn.connect(fuktDry).connect(master);
+  jerkF.connect(fuktEcho).connect(echoIn);
+  jerkF.connect(fuktRumble).connect(rumbleIn);
+  krossShape._make = krossMake;
+}
+
+/* röster */
+function osc(type, f, t) { const o = ctx.createOscillator(); o.type = type; o.frequency.setValueAtTime(f, t); return o; }
+function noise(t) { const s = ctx.createBufferSource(); s.buffer = noiseBuf; s.loop = true; s.start(t, Math.random() * 1.5); return s; }
+function env(g, t, peak, dec, atk = 0.002) { g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(peak, t + atk); g.gain.setTargetAtTime(0, t + atk, dec); }
+function duck(t) { const g = rumbleDuck.gain; g.cancelScheduledValues(t); g.setValueAtTime(0.15, t); g.setTargetAtTime(1, t + 0.03, 0.12); }
+
+const V = {
+  kick(t, st, dur, tr) {
+    const p = tr.p || {}, o = osc("sine", 160, t), g = ctx.createGain(), sh = ctx.createWaveShaper();
+    o.frequency.exponentialRampToValueAtTime(p.low || 47, t + 0.085);
+    sh.curve = tanhCurve(1 + (p.drive || 0.3) * 4);
+    env(g, t, st.acc ? 0.95 : 0.8, 0.09 + (p.decay || 0.4) * 0.12, 0.001);
+    o.connect(sh).connect(g).connect(tr.dest);
+    const n = noise(t), bp = ctx.createBiquadFilter(), ng = ctx.createGain(); bp.type = "bandpass"; bp.frequency.value = 3000;
+    env(ng, t, 0.25, 0.004, 0.0005); n.connect(bp).connect(ng).connect(tr.dest); n.stop(t + 0.05);
+    o.start(t); o.stop(t + 1);
+    if (tr.rumble) { const s = ctx.createGain(); s.gain.value = tr.rumble(); g.connect(s).connect(rumbleIn); }
+    duck(t);
+  },
+  hat(t, st, dur, tr) {
+    const n = noise(t), hp = ctx.createBiquadFilter(), g = ctx.createGain(); hp.type = "highpass"; hp.frequency.value = 7200;
+    const open = st.acc; env(g, t, open ? 0.28 : 0.22, open ? 0.09 : 0.016, 0.0008);
+    n.connect(hp).connect(g).connect(tr.dest); n.stop(t + (open ? 0.6 : 0.15));
+  },
+  clap(t, st, dur, tr) {
+    const n = noise(t), bp = ctx.createBiquadFilter(), g = ctx.createGain(); bp.type = "bandpass"; bp.frequency.value = 1150; bp.Q.value = 1.4;
+    [0, 0.011, 0.022].forEach(o => { g.gain.setValueAtTime(0.55, t + o); g.gain.setTargetAtTime(0.03, t + o + 0.001, 0.004); });
+    g.gain.setValueAtTime(0.5, t + 0.032); g.gain.setTargetAtTime(0, t + 0.034, 0.06 + (st.acc ? 0.05 : 0));
+    n.connect(bp).connect(g).connect(tr.dest); n.stop(t + 0.6);
+    if (tr.send) { const s = ctx.createGain(); s.gain.value = tr.send; g.connect(s).connect(echoIn); }
+  },
+  perc(t, st, dur, tr) {
+    const f = mtof(72 + ROOT + deg(st.note || 0)), o = osc("sine", f, t), m = osc("sine", f * 3.53, t), mg = ctx.createGain(), g = ctx.createGain();
+    mg.gain.setValueAtTime(f * (tr.metal || 1.5), t); mg.gain.setTargetAtTime(0, t, 0.02); m.connect(mg).connect(o.frequency);
+    o.frequency.exponentialRampToValueAtTime(f * 0.75, t + 0.04);
+    env(g, t, 0.3, 0.035); o.connect(g).connect(tr.dest);
+    if (tr.send) { const s = ctx.createGain(); s.gain.value = tr.send; g.connect(s).connect(echoIn); }
+    o.start(t); m.start(t); o.stop(t + 0.5); m.stop(t + 0.5);
+  },
+  tom(t, st, dur, tr) {
+    const f = mtof(43 + ROOT + deg(st.note || 0)), o = osc("sine", f * 1.7, t), g = ctx.createGain();
+    o.frequency.exponentialRampToValueAtTime(f, t + 0.09);
+    env(g, t, 0.45, 0.13); o.connect(g).connect(tr.dest);
+    if (tr.send) { const s = ctx.createGain(); s.gain.value = tr.send; g.connect(s).connect(echoIn); }
+    o.start(t); o.stop(t + 0.9);
+  },
+  rim(t, st, dur, tr) {
+    const n = noise(t), bp = ctx.createBiquadFilter(), g = ctx.createGain(); bp.type = "bandpass"; bp.frequency.value = 1800; bp.Q.value = 5;
+    env(g, t, 0.5, 0.012, 0.0005); n.connect(bp).connect(g).connect(tr.dest); n.stop(t + 0.1);
+    const o = osc("triangle", 430, t), og = ctx.createGain(); env(og, t, 0.25, 0.01, 0.0005); o.connect(og).connect(tr.dest); o.start(t); o.stop(t + 0.1);
+  },
+  // syntröst: monofon bas/lead med acid-filter, slide och accent
+  synth(t, st, dur, tr) {
+    const p = tr.p, demo = tr.demo, A = st.acc ? 1 : 0;
+    const f = mtof(tr.base + ROOT + deg(st.note || 0));
+    const mix = ctx.createGain(), f1 = ctx.createBiquadFilter(), f2 = ctx.createBiquadFilter(), sh = ctx.createWaveShaper(), g = ctx.createGain();
+    f1.type = f2.type = "lowpass";
+    const cut = clamp(p.cut * (demo.cutMul || 1), 40, 9000), res = clamp(p.res * (demo.resMul || 1), 0, 1);
+    f1.Q.value = 0.8 + res * (p.acid ? 20 : 9); f2.Q.value = 0.6;
+    const peak = Math.min(16000, cut * Math.pow(2, p.env * 5.5 + A * 2));
+    [f1, f2].forEach(f => { f.frequency.setValueAtTime(peak, t); f.frequency.setTargetAtTime(cut, t + 0.003, p.dec / 3); });
+    sh.curve = tanhCurve(1 + p.drive * 5);
+    const slideFrom = st.slide && tr.lastF ? tr.lastF : 0; tr.lastF = f;
+    const add = (type, mul, det, gain) => {
+      const o = osc(type, (slideFrom || f) * mul, t); o.detune.value = det;
+      if (slideFrom) o.frequency.exponentialRampToValueAtTime(f * mul, t + 0.07);
+      const og = ctx.createGain(); og.gain.value = gain; o.connect(og).connect(mix); o.start(t); o.stop(t + dur * 2 + 0.6);
+    };
+    if (p.type === "reese") { add("sawtooth", 1, -14, 0.32); add("sawtooth", 1, 14, 0.32); add("sine", 0.5, 0, 0.35); }
+    else if (p.type === "super") { [-22, -10, 0, 10, 22].forEach(d => add("sawtooth", 1, d, 0.17)); }
+    else if (p.type === "square") { add("square", 1, 0, 0.4); add("sine", 0.5, 0, 0.25); }
+    else add("sawtooth", 1, 0, 0.5);
+    if (p.chord) p.chord.forEach(s => add("sawtooth", Math.pow(2, s / 12), 7, 0.16));
+    const gate = st.slide || (tr.nextSlides && tr.nextSlides()) ? dur * 1.05 : dur * p.gate;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime((0.55 + A * 0.25) * (p.vol || 1), t + 0.003);
+    g.gain.setValueAtTime((0.55 + A * 0.25) * (p.vol || 1), t + gate); g.gain.setTargetAtTime(0, t + gate, p.rel || 0.015);
+    mix.connect(sh).connect(f1).connect(f2).connect(g).connect(tr.dest);
+    if (p.send) { const s = ctx.createGain(); s.gain.value = p.send; g.connect(s).connect(echoIn); }
+  },
+};
+
+/* ===== Sequencern ===== */
+function parse(str, notes = [0]) {
+  let ni = 0;
+  return [...str].map(c => {
+    if (c === ".") return { on: 0 };
+    return { on: 1, acc: c === "X" || c === "S" ? 1 : 0, slide: c === "s" || c === "S" ? 1 : 0, prob: c === "p" ? 0.5 : 1, note: notes[ni++ % notes.length] };
+  });
+}
+function euclid(k, n, rot = 0) { return Array.from({ length: n }, (_, i) => ({ on: (((i - rot + n) % n) * k) % n < k ? 1 : 0, acc: 0 })); }
+
+let cur = null, timer = null, startT = 0;
+function stopAll() {
+  if (!cur) return;
+  cur.running = false; clearInterval(timer);
+  if (cur.onStop) cur.onStop();
+  cur.playBtn.textContent = "▶ SPELA"; cur.playBtn.classList.remove("on");
+  cur.tracks.forEach(t => { t.vis = -1; t.vq = []; });
+  cur.draw(); cur = null;
+}
+function startDemo(d) {
+  initAudio(); ctx.resume();
+  if (cur && cur !== d) stopAll();
+  cur = d; d.running = true;
+  startT = ctx.currentTime + 0.06;
+  d.tracks.forEach(t => { t.next = startT; t.pos = 0; t.n = 0; t.vq = []; t.lastF = 0; });
+  if (d.onStart) d.onStart();
+  d.playBtn.textContent = "■ STOPP"; d.playBtn.classList.add("on");
+  timer = setInterval(tick, 22); tick();
+}
+function tick() {
+  if (!cur || !cur.running) return;
+  const now = ctx.currentTime, b16 = 60 / cur.bpm / 4;
+  for (const t of cur.tracks) {
+    let guard = 0;
+    while (t.next < now + 0.12 && guard++ < 32) {
+      const dur = b16 * t.rate, pos = t.pos, st = t.steps[pos];
+      let when = t.next;
+      if (t.rate === 1 && t.n % 2 === 1) when += (cur.swing || 0) * dur;
+      if (cur.offset) when += cur.offset(t, dur);
+      when = Math.max(now + 0.003, when);
+      if (st && st.on && !t.mute && Math.random() < (st.prob ?? 1)) t.play(when, st, dur, t);
+      t.vq.push([when, pos]);
+      t.pos = (pos + 1) % t.len; t.n++;
+      if (t.pos === 0 && cur.onWrap) cur.onWrap(t);
+      t.next += dur;
+    }
+  }
+}
+
+/* ===== UI-byggstenar ===== */
+function arc(a, b) {
+  if (b - a < 0.001) return "";
+  const P = v => { const r = (v * 270 - 135) * Math.PI / 180; return [25 + 18 * Math.sin(r), 25 - 18 * Math.cos(r)]; };
+  const [x0, y0] = P(a), [x1, y1] = P(b);
+  return `M${x0.toFixed(2)} ${y0.toFixed(2)}A18 18 0 ${(b - a) * 270 > 180 ? 1 : 0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;
+}
+function knob(host, o) {
+  const w = document.createElement("div"); w.className = "knob"; w.tabIndex = 0; w.setAttribute("role", "slider"); w.setAttribute("aria-label", o.label);
+  if (o.col) w.style.setProperty("--kc", o.col);
+  w.innerHTML = `<svg viewBox="0 0 50 50"><path class="kt" d="${arc(0, 1)}"/><path class="kv"/><circle class="kb" cx="25" cy="25" r="12"/><line class="kp" x1="25" y1="25"/></svg><div class="kl">${o.label}</div><div class="kn"></div>`;
+  const kv = w.querySelector(".kv"), kp = w.querySelector(".kp"), kn = w.querySelector(".kn");
+  w.update = () => { const v = o.get(); kv.setAttribute("d", arc(0, v)); const r = (v * 270 - 135) * Math.PI / 180; kp.setAttribute("x2", 25 + 10 * Math.sin(r)); kp.setAttribute("y2", 25 - 10 * Math.cos(r)); kn.textContent = o.fmt(v); w.setAttribute("aria-valuenow", Math.round(v * 100)); };
+  let y0 = 0, v0 = 0;
+  w.addEventListener("pointerdown", e => { w.setPointerCapture(e.pointerId); y0 = e.clientY; v0 = o.get(); e.preventDefault(); });
+  w.addEventListener("pointermove", e => { if (!w.hasPointerCapture(e.pointerId)) return; o.set(clamp(v0 + (y0 - e.clientY) / 160)); w.update(); });
+  w.addEventListener("wheel", e => { e.preventDefault(); o.set(clamp(o.get() - Math.sign(e.deltaY) * 0.03)); w.update(); }, { passive: false });
+  w.addEventListener("keydown", e => { const d = { ArrowUp: 0.03, ArrowRight: 0.03, ArrowDown: -0.03, ArrowLeft: -0.03 }[e.key]; if (d) { e.preventDefault(); o.set(clamp(o.get() + d)); w.update(); } });
+  host.appendChild(w); w.update(); return w;
+}
+const pct = v => Math.round(v * 100) + " %";
+
+function buildDemo(el, d) {
+  el.innerHTML = `<div class="dtop"><button class="play">▶ SPELA</button><div class="presets"></div></div>
+    <canvas class="grid" height="150"></canvas><div class="knobs"></div><p class="dnote">${d.note}</p>`;
+  d.el = el;
+  d.playBtn = el.querySelector(".play");
+  d.playBtn.onclick = () => (cur === d && d.running ? stopAll() : startDemo(d));
+  const pr = el.querySelector(".presets");
+  d.presetBtns = d.presets.map((p, i) => {
+    const b = document.createElement("button"); b.className = "chip"; b.textContent = p.name;
+    b.onclick = () => { d.load(i); if (!(cur === d && d.running)) startDemo(d); };
+    pr.appendChild(b); return b;
+  });
+  if (d.extra) d.extra(el.querySelector(".dtop"));
+  const kh = el.querySelector(".knobs");
+  d.knobEls = d.knobs.map(k => knob(kh, k));
+  d.canvas = el.querySelector("canvas");
+  d.draw = () => drawGrid(d);
+  d.load(0);
+}
+function drawGrid(d) {
+  const cv = d.canvas, dpr = window.devicePixelRatio || 1, W = cv.clientWidth || 400, rows = d.tracks.length;
+  const H = Math.max(110, rows * 22 + 8);
+  if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); cv.style.height = H + "px"; }
+  const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  g.fillStyle = "#0f1011"; g.fillRect(0, 0, W, H);
+  const labelW = W < 420 ? 52 : 74, cols = 16, cw = (W - labelW - 8) / cols, rh = (H - 8) / rows;
+  g.font = "600 10px 'JetBrains Mono', monospace"; g.textBaseline = "middle";
+  d.tracks.forEach((t, r) => {
+    const y = 4 + r * rh;
+    g.fillStyle = t.mute ? "#5c5f62" : "#8b8e91"; g.fillText(t.name, 6, y + rh / 2);
+    for (let i = 0; i < cols; i++) {
+      const x = labelW + i * cw, st = t.steps[i], inside = i < t.len;
+      if (!inside) { g.strokeStyle = "#2c2f32"; g.setLineDash([2, 2]); g.strokeRect(x + 1.5, y + 2.5, cw - 3, rh - 5); g.setLineDash([]); continue; }
+      g.fillStyle = st && st.on ? (st.acc ? t.col : t.col + "bb") : (i % 4 === 0 ? "#2a2c2f" : "#232527");
+      g.fillRect(x + 1, y + 2, cw - 2, rh - 4);
+      if (t.vis === i) { g.strokeStyle = "#d9d6cf"; g.lineWidth = 1.6; g.strokeRect(x + 1.5, y + 2.5, cw - 3, rh - 5); g.lineWidth = 1; }
+    }
+  });
+}
+
+/* ===== BETONG-demo: trummor ===== */
+const betong = {
+  bpm: 132, swing: 0.1, rumbleAmt: 0.5, filt: 1, crazy: 0.5,
+  note: "Demo: sex syntade trumspår i webbläsaren. BETONG har 16 pads med 103 riktiga ljud, åtta spår, sampling och 50 mönster.",
+  presets: [
+    { name: "Fabriksgolv", bpm: 132, swing: 0.1, rumble: 0.55, t: { KICK: [16, "X...x...x...x..."], HAT: [16, "..x...x...x...X."], CLAP: [16, "....x.......x..."], PERC: [7, "x..x.x.", [7, 4, 9]], TOM: [13, "x....x..x....", [0, 2, -1]], RIM: [5, "..x.x"] } },
+    { name: "Minus Loop", bpm: 128, swing: 0.18, rumble: 0.3, t: { KICK: [16, "x...x...x...x..."], HAT: [12, "..x..x..x.xx"], CLAP: [16, "................"], PERC: [5, "x..p.", [9, 7]], TOM: [16, "................"], RIM: [11, "x....x....."] } },
+    { name: "Skev 5/7", bpm: 134, swing: 0.05, rumble: 0.5, t: { KICK: [16, "X...x...x...x..p"], HAT: [7, "x.x.X.x"], CLAP: [5, "..x.."], PERC: [7, "x.xx.x.", [0, 7, 3, 10]], TOM: [11, "x...x.x....", [0, -2, 2]], RIM: [9, "x..x...x."] } },
+    { name: "Bunkergolv", bpm: 130, swing: 0.08, rumble: 0.9, t: { KICK: [16, "X...x...x...x..."], HAT: [16, "..x...x...x...x."], CLAP: [16, "....x.......x..."], PERC: [16, "................"], TOM: [8, "x.......", [0]], RIM: [13, "....x.....x.."] } },
+    { name: "Hypnos", bpm: 126, swing: 0.15, rumble: 0.45, t: { KICK: [16, "x...x...x...x..."], HAT: [16, "x.X.x.X.x.X.x.Xx"], CLAP: [16, "....x.......x..."], PERC: [13, "x..x..x.x..x.", [7, 9, 11, 7, 4]], TOM: [16, "................"], RIM: [7, "..x...x"] } },
+  ],
+};
+betong.tracks = [
+  { name: "KICK", play: V.kick, col: "#ff8a1f" }, { name: "HAT", play: V.hat, col: "#b9b6ae" },
+  { name: "CLAP", play: V.clap, col: "#b9b6ae", send: 0.12 }, { name: "PERC", play: V.perc, col: "#4fd1e0", send: 0.35 },
+  { name: "TOM", play: V.tom, col: "#2ea7b5", send: 0.2 }, { name: "RIM", play: V.rim, col: "#c96a16" },
+].map(t => ({ ...t, rate: 1, len: 16, steps: [], vq: [], vis: -1 }));
+betong.tracks[0].rumble = () => betong.rumbleAmt * 0.9;
+betong.load = function (i) {
+  const p = this.presets[i]; this.bpm = p.bpm; this.swing = p.swing; this.rumbleAmt = p.rumble;
+  this.tracks.forEach(t => { const s = p.t[t.name]; t.len = s[0]; t.steps = parse(s[1], s[2]); if (t.pos >= t.len) t.pos = 0; });
+  this.presetBtns.forEach((b, k) => b.classList.toggle("on", k === i));
+  this.knobEls && this.knobEls.forEach(k => k.update()); this.draw();
+};
+betong.onStart = () => { betong.tracks.forEach(t => t.dest = master); setMasterLP(betong.filt); };
+betong.onStop = () => setMasterLP(1);
+function setMasterLP(v) { if (ctx) masterLP.frequency.setTargetAtTime(150 * Math.pow(2, v * 7.06), ctx.currentTime, 0.03); }
+betong.knobs = [
+  { label: "SWING", get: () => betong.swing / 0.3, set: v => betong.swing = v * 0.3, fmt: v => Math.round(50 + v * 15) + " %" },
+  { label: "RUMBLE", get: () => betong.rumbleAmt, set: v => betong.rumbleAmt = v, fmt: pct, col: "var(--cy)" },
+  { label: "FILTER", get: () => betong.filt, set: v => { betong.filt = v; if (cur === betong) setMasterLP(v); }, fmt: v => v > 0.98 ? "öppet" : Math.round(150 * Math.pow(2, v * 7.06)) + " Hz" },
+  { label: "GALENSKAP", get: () => betong.crazy, set: v => betong.crazy = v, fmt: pct },
+];
+betong.extra = top => {
+  const b = document.createElement("button"); b.className = "dice"; b.textContent = "⚄ SLUMPA";
+  b.onclick = () => {
+    const g = betong.crazy, odd = [5, 7, 9, 11, 13, 12, 15];
+    betong.tracks.forEach((t, i) => {
+      if (i === 0) { t.len = 16; t.steps = parse(Math.random() < g * 0.5 ? "X...x...x...x..p" : "X...x...x...x..."); return; }
+      t.len = Math.random() < g ? odd[Math.floor(Math.random() * odd.length)] : 16;
+      const k = Math.max(1, Math.round(t.len * (0.15 + Math.random() * 0.35)));
+      t.steps = euclid(k, t.len, Math.floor(Math.random() * t.len)).map(s => ({ ...s, acc: s.on && Math.random() < 0.25 ? 1 : 0, note: [0, 2, 4, 7, 9][Math.floor(Math.random() * 5)], prob: Math.random() < g * 0.3 ? 0.5 : 1 }));
+      if (i === 1 && Math.random() < 0.6) { t.len = 16; t.steps = parse("..x...x...x...x."); }
+      if (t.pos >= t.len) t.pos = 0;
+    });
+    betong.presetBtns.forEach(x => x.classList.remove("on")); betong.draw();
+    if (!(cur === betong && betong.running)) startDemo(betong);
+  };
+  top.appendChild(b);
+};
+
+/* ===== ARMERING-demo: syntar ===== */
+const S = (type, cut, res, envA, dec, drive, gate, send, extra = {}) => ({ type, cut, res, env: envA, dec, drive, gate, send, acid: false, ...extra });
+const armering = {
+  bpm: 132, drift: 0.3, trassel: 0.35, cutMul: 1, resMul: 1,
+  note: "Demo: fyra syntspår och en BETONG-kick i webbläsaren. ARMERING har åtta vågformer, ackord, LFO, 2x översampling och fler rattar.",
+  presets: [
+    { name: "Armeringsjärn", bpm: 132, drift: 0.3, trassel: 0.35,
+      A: [16, "X.xs.xX.x.sxx.X.", [0, 0, 7, 0, 2, 0, 1, 0, 4, 0, 0, 5], S("saw", 320, 0.82, 0.6, 0.26, 0.35, 0.55, 0.15, { acid: true })],
+      B: [13, "x..x..x.x..x.", [0, 0, -1, 2], S("reese", 170, 0.25, 0.25, 0.5, 0.3, 0.8, 0.05, { vol: 0.9 })],
+      C: [7, "x..x...", [0], S("super", 900, 0.3, 0.4, 0.18, 0.1, 0.25, 0.55, { chord: [3, 7, 10], vol: 0.5, rel: 0.12 }), 2],
+      D: [5, "x.x..", [7, 4], S("saw", 1400, 0.5, 0.5, 0.14, 0.2, 0.3, 0.5, { vol: 0.45 })] },
+    { name: "Syrabad 303", bpm: 134, drift: 0.2, trassel: 0.45,
+      A: [16, "XsxSxxsXxsxxSxsx", [0, 0, 7, 0, 8, 0, 3, 1, 0, 7, 0, 0, 5, 0, 2, 9], S("saw", 240, 0.95, 0.78, 0.28, 0.5, 0.55, 0.2, { acid: true })],
+      B: [14, "x.s.x..x.S.x..", [0, 0, 2, 4, 0, 1], S("square", 280, 0.85, 0.6, 0.22, 0.4, 0.55, 0.05, { acid: true, vol: 0.6 }), 2],
+      C: [16, "x...............", [0], S("saw", 1000, 0.3, 0.4, 0.1, 0.05, 0.15, 0.6, { chord: [3, 7], vol: 0.35 })],
+      D: [16, "....x.......x...", [7, 9], S("saw", 900, 0.8, 0.6, 0.16, 0.3, 0.4, 0.5, { acid: true, vol: 0.4 })] },
+    { name: "Tunnelbana", bpm: 130, drift: 0.35, trassel: 0.3,
+      A: [16, ".xxx.xxx.xxx.xX3", [0, 0, 7, 0, 0, 7, 0, 0, 7, 0, 3, 0], S("reese", 260, 0.4, 0.45, 0.16, 0.3, 0.5, 0.05)],
+      B: [8, "x.......", [0], S("super", 150, 0.3, 0.2, 0.4, 0.2, 0.85, 0.15, { vol: 0.5 }), 2],
+      C: [13, "..x.....x....", [0], S("saw", 700, 0.35, 0.35, 0.15, 0.1, 0.2, 0.75, { chord: [3, 7, 10, 14], vol: 0.45, rel: 0.2 })],
+      D: [11, "x..x....x..", [4, 7, 11], S("square", 1800, 0.4, 0.3, 0.1, 0.1, 0.2, 0.6, { vol: 0.3 })] },
+    { name: "Gummifabrik", bpm: 128, drift: 0.25, trassel: 0.3,
+      A: [16, "x.s.X.xs..x.S.x.", [0, 7, 7, 0, 0, 3, 5, 4, 0], S("square", 380, 0.55, 0.7, 0.14, 0.2, 0.5, 0.2)],
+      B: [12, "..x..x..x..x", [0, 0, -1, 0], S("square", 300, 0.4, 0.4, 0.2, 0.15, 0.5, 0.05, { vol: 0.7 })],
+      C: [16, "..........x.....", [0], S("saw", 900, 0.3, 0.5, 0.13, 0.05, 0.2, 0.6, { chord: [7], vol: 0.4 })],
+      D: [6, "x..x.p", [7, 4], S("saw", 2200, 0.3, 0.4, 0.09, 0, 0.2, 0.6, { vol: 0.35 })] },
+    { name: "Minus Plastik", bpm: 126, drift: 0.4, trassel: 0.4,
+      A: [15, "x..x...x..p.x..", [0, 0, 0, 1, 0], S("square", 260, 0.55, 0.35, 0.12, 0.1, 0.35, 0.4)],
+      B: [9, "x....x...", [0, -2], S("square", 150, 0.4, 0.2, 0.22, 0.15, 0.45, 0.1, { vol: 0.8 }), 2],
+      C: [11, "....x......", [0], S("saw", 1200, 0.2, 0.3, 0.12, 0, 0.15, 0.7, { chord: [3, 7, 10], vol: 0.35 })],
+      D: [5, "x..p.", [7, 9], S("saw", 2000, 0.45, 0.4, 0.08, 0, 0.15, 0.65, { vol: 0.3 })] },
+  ],
+};
+armering.tracks = [
+  { name: "BAS A", key: "A", base: 36, col: "#ff8a1f", anchor: 0.55 }, { name: "BAS B", key: "B", base: 24, col: "#4fd1e0", anchor: 1 },
+  { name: "STAB", key: "C", base: 48, col: "#2ea7b5", anchor: 0.85 }, { name: "LEAD", key: "D", base: 60, col: "#b9b6ae", anchor: 1 },
+  { name: "KICK", key: "K", col: "#c96a16", anchor: 0, play: V.kick },
+].map((t, i) => ({ ...t, play: t.play || V.synth, rate: 1, len: 16, steps: [], vq: [], vis: -1, demo: null, dph: i * 1.7, dsp: [0.11, 0.07, 0.05, 0.13, 0][i] }));
+armering.tracks.forEach(t => { t.demo = armering; t.nextSlides = () => { const s = t.steps[(t.pos + 1) % t.len]; return s && s.on && s.slide; }; });
+armering.load = function (i) {
+  const p = this.presets[i]; this.bpm = p.bpm; this.drift = p.drift; this.trassel = p.trassel;
+  this.tracks.forEach(t => {
+    if (t.key === "K") { t.len = 16; t.steps = parse("x...x...x...x..."); return; }
+    const s = p[t.key]; t.len = s[0]; t.steps = parse(s[1], s[2]); t.home = t.steps.map(x => ({ ...x })); t.p = s[3]; t.rate = s[4] || 1;
+    if (t.pos >= t.len) t.pos = 0;
+  });
+  this.presetBtns.forEach((b, k) => b.classList.toggle("on", k === i));
+  this.knobEls && this.knobEls.forEach(k => k.update()); this.draw();
+};
+armering.onStart = () => armering.tracks.forEach(t => t.dest = master);
+// ur takt: varje spår svajar runt takten, kicken står still
+armering.offset = (t, dur) => { if (!t.anchor) return 0; t.dph += t.dsp * (0.4 + armering.drift); return Math.sin(t.dph) * armering.drift * t.anchor * dur * 0.42; };
+// trassel: muterar ett steg per varv, och reder ut hälften av gångerna
+armering.onWrap = t => {
+  if (!t.home || Math.random() > armering.trassel * 0.8) return;
+  const s = t.steps, L = t.len;
+  const diff = []; for (let i = 0; i < L; i++) if (JSON.stringify(s[i]) !== JSON.stringify(t.home[i])) diff.push(i);
+  if (diff.length && Math.random() < 0.45) { const i = diff[Math.floor(Math.random() * diff.length)]; s[i] = { ...t.home[i] }; return; }
+  const ons = []; for (let i = 0; i < L; i++) if (s[i].on) ons.push(i);
+  const r = Math.random();
+  if (r < 0.3) { const dir = Math.random() < 0.5 ? 1 : -1, seg = s.slice(0, L); for (let i = 0; i < L; i++) s[i] = seg[(i - dir + L) % L]; }
+  else if (r < 0.65 && ons.length) { const i = ons[Math.floor(Math.random() * ons.length)]; s[i] = { ...s[i], note: clamp(s[i].note + [-2, -1, 1, 2, 7, -7][Math.floor(Math.random() * 6)], -7, 14) }; }
+  else { const a = Math.floor(Math.random() * L), b = Math.floor(Math.random() * L); [s[a], s[b]] = [s[b], s[a]]; }
+};
+armering.knobs = [
+  { label: "CUTOFF", get: () => clamp(Math.log2(armering.cutMul) / 4 + 0.5), set: v => armering.cutMul = Math.pow(2, (v - 0.5) * 4), fmt: v => (v >= 0.5 ? "+" : "") + Math.round((v - 0.5) * 48) + " st" },
+  { label: "RESONANS", get: () => armering.resMul / 1.4, set: v => armering.resMul = v * 1.4, fmt: v => Math.round(v * 140) + " %" },
+  { label: "UR TAKT", get: () => armering.drift, set: v => armering.drift = v, fmt: pct, col: "var(--cy)" },
+  { label: "TRASSEL", get: () => armering.trassel, set: v => armering.trassel = v, fmt: pct },
+];
+armering.resMul = 1;
+armering.extra = top => {
+  const b = document.createElement("button"); b.className = "chip cy on"; b.textContent = "BETONG-kick";
+  b.title = "Slå av eller på en kick under synten";
+  b.onclick = () => { const k = armering.tracks[4]; k.mute = !k.mute; b.classList.toggle("on", !k.mute); armering.draw(); };
+  top.appendChild(b);
+};
+
+/* ===== FUKT-demo: effekt på en loop ===== */
+const fukt = {
+  bpm: 130, obalans: 0.35, grus: 0.25, rumble: 0.6, eko: 0.6, on: true,
+  note: "Demo: en loop med trummor och bas går genom fyra av FUKT:s sex effektspår. Slå av och på för att höra skillnaden. Pluginet har gruskross i tre band, pump, rörelse och performance-knappar.",
+  presets: [
+    { name: "Fuktfläck", obalans: 0.35, grus: 0.25, rumble: 0.55, eko: 0.55, fx: [[16, 11, 0, 0.6, 0.55], [13, 5, 2, 0.7, 0.4], [16, 3, 3, 0.8, 0.25], [16, 4, 2, 0.8, 0.5]], fcut: 900 },
+    { name: "Bunkergolv", obalans: 0.3, grus: 0.4, rumble: 0.95, eko: 0.35, fx: [[16, 12, 0, 0.35, 0.7], [16, 0, 0, 0, 0.4], [16, 2, 6, 0.6, 0.25], [16, 8, 1, 1, 0.6]], fcut: 900 },
+    { name: "Kulvert", obalans: 0.3, grus: 0.1, rumble: 0.45, eko: 0.9, fx: [[16, 13, 0, 0.3, 0.6], [11, 3, 1, 0.6, 0.5], [13, 4, 2, 1, 0.3], [16, 2, 4, 0.6, 0.6]], fcut: 2400 },
+    { name: "Gruskross", obalans: 0.4, grus: 0.8, rumble: 0.6, eko: 0.4, fx: [[16, 10, 0, 0.5, 0.5], [13, 5, 0, 0.75, 0.3], [16, 2, 7, 0.6, 0.2], [16, 4, 2, 0.6, 0.5]], fcut: 700 },
+    { name: "Baktakt", obalans: 0.8, grus: 0.25, rumble: 0.6, eko: 0.55, fx: [[16, 11, 0, 0.55, 0.45], [16, 3, 1, 0.6, 0.45], [16, 3, 3, 0.8, 0.25], [16, 4, 2, 0.7, 0.55]], fcut: 1000 },
+  ],
+};
+const SKEW = [0.18, -0.08, 0.3, 0.12];
+const fxFire = {
+  gate(t, st, dur, tr) { const g = gateG.gain, depth = tr.amt; g.setTargetAtTime(1, t, 0.002); g.setTargetAtTime(1 - depth, t + dur * tr.hold * 2, 0.006); },
+  jerk(t, st, dur, tr) { const f = jerkF.frequency, base = fukt.fcut; f.setValueAtTime(Math.min(16000, base * Math.pow(2, tr.amt * 5 * (st.acc ? 1.2 : 1))), t); f.setTargetAtTime(base, t + 0.004, dur * tr.hold); },
+  echo(t, st, dur, tr) { const g = fuktEcho.gain; g.setTargetAtTime(tr.amt * fukt.eko, t, 0.002); g.setTargetAtTime(0, t + dur * tr.hold * 2, 0.01); },
+  rumble(t, st, dur, tr) { const g = fuktRumble.gain; g.setTargetAtTime(tr.amt * fukt.rumble * 1.4, t, 0.003); g.setTargetAtTime(0.03, t + dur * tr.hold * 2, 0.02); },
+};
+fukt.tracks = [
+  { name: "KICK", play: V.kick, col: "#c96a16", src: 1, steps: parse("X...x...x...x...") },
+  { name: "HAT", play: V.hat, col: "#5c5f62", src: 1, steps: parse("..x...x...x...X.") },
+  { name: "BAS", play: V.synth, col: "#5c5f62", src: 1, base: 36, steps: parse("x.xs.xX.x.sx.xX.", [0, 0, 7, 0, 2, 0, 1, 0, 4, 0, 0, 5]), p: S("saw", 380, 0.7, 0.5, 0.22, 0.25, 0.55, 0, { acid: true, vol: 0.8 }) },
+  { name: "GATE", play: fxFire.gate, col: "#b9b6ae", fx: 0 },
+  { name: "FILTER", play: fxFire.jerk, col: "#ff8a1f", fx: 1 },
+  { name: "EKO", play: fxFire.echo, col: "#4fd1e0", fx: 2 },
+  { name: "RUMBLE", play: fxFire.rumble, col: "#c96a16", fx: 3 },
+].map(t => ({ ...t, rate: 1, len: 16, steps: t.steps || [], vq: [], vis: -1, demo: null }));
+fukt.tracks.forEach(t => { t.demo = fukt; });
+fukt.tracks[2].nextSlides = () => { const t = fukt.tracks[2], s = t.steps[(t.pos + 1) % t.len]; return s && s.on && s.slide; };
+fukt.load = function (i) {
+  const p = this.presets[i]; this.obalans = p.obalans; this.grus = p.grus; this.rumble = p.rumble; this.eko = p.eko; this.fcut = p.fcut;
+  this.tracks.filter(t => t.fx !== undefined).forEach(t => {
+    const [len, hits, rot, amt, hold] = p.fx[t.fx]; t.len = len; t.amt = amt; t.hold = hold;
+    t.steps = euclid(hits, len, rot); if (t.fx === 0) t.steps[0].on = 1; // gaten öppnar alltid på ettan
+    if (t.steps.find(s => s.on)) t.steps.find(s => s.on).acc = 1;
+    if (t.pos >= t.len) t.pos = 0;
+  });
+  applyFukt();
+  this.presetBtns.forEach((b, k) => b.classList.toggle("on", k === i));
+  this.knobEls && this.knobEls.forEach(k => k.update()); this.draw();
+};
+function applyFukt() {
+  if (!ctx) return;
+  const n = ctx.currentTime, on = fukt.on && cur === fukt;
+  krossShape.curve = tanhCurve(1 + fukt.grus * 9);
+  krossShape._make.gain.setTargetAtTime(1 / (1 + fukt.grus * 1.4), n, 0.02);
+  fuktWet.gain.setTargetAtTime(on ? 1 : 0, n, 0.02);
+  fuktDry.gain.setTargetAtTime(on ? 0 : 1, n, 0.02);
+  rumbleOut.gain.setTargetAtTime(0.35 + fukt.rumble * 0.45, n, 0.05);
+  fb.gain.setTargetAtTime(0.4 + fukt.eko * 0.35, n, 0.05);
+  if (!on) { fuktEcho.gain.cancelScheduledValues(n); fuktEcho.gain.setTargetAtTime(0, n, 0.01); fuktRumble.gain.cancelScheduledValues(n); fuktRumble.gain.setTargetAtTime(0, n, 0.02); }
+}
+fukt.onStart = () => {
+  fukt.tracks.forEach(t => { t.dest = fuktIn; t.mute = t.fx !== undefined && !fukt.on; });
+  dL.delayTime.value = dR.delayTime.value = 0.75 * 60 / fukt.bpm;
+  gateG.gain.setValueAtTime(1 - fukt.tracks[3].amt, ctx.currentTime);
+  applyFukt();
+};
+fukt.onStop = () => {
+  const n = ctx.currentTime;
+  [gateG.gain, jerkF.frequency, fuktEcho.gain, fuktRumble.gain].forEach(p => p.cancelScheduledValues(n));
+  gateG.gain.setValueAtTime(1, n); jerkF.frequency.setValueAtTime(18000, n); fuktEcho.gain.setValueAtTime(0, n); fuktRumble.gain.setValueAtTime(0, n);
+  fuktWet.gain.setValueAtTime(0, n); fuktDry.gain.setValueAtTime(0, n);
+  dL.delayTime.value = dR.delayTime.value = 0.75 * 60 / 132;
+};
+// obalans: effektslagen hänger före eller efter, men ettan ligger alltid rent
+fukt.offset = (t, dur) => {
+  if (t.fx === undefined) return 0;
+  const step = t.n % t.len;
+  if (Math.round((t.next - startT) / (dur)) % 16 === 0) return 0;
+  return (fukt.obalans * SKEW[t.fx] + (step % 2 ? fukt.obalans * 0.2 : 0)) * dur;
+};
+fukt.knobs = [
+  { label: "OBALANS", get: () => fukt.obalans, set: v => fukt.obalans = v, fmt: pct, col: "var(--cy)" },
+  { label: "GRUS", get: () => fukt.grus, set: v => { fukt.grus = v; applyFukt(); }, fmt: pct },
+  { label: "RUMBLE", get: () => fukt.rumble, set: v => { fukt.rumble = v; applyFukt(); }, fmt: pct },
+  { label: "EKO", get: () => fukt.eko, set: v => { fukt.eko = v; applyFukt(); }, fmt: pct, col: "var(--cy)" },
+];
+fukt.extra = top => {
+  const box = document.createElement("div"); box.className = "ab";
+  const b = document.createElement("button"); b.className = "chip cy on"; b.textContent = "FUKT PÅ";
+  b.onclick = () => {
+    fukt.on = !fukt.on; b.textContent = fukt.on ? "FUKT PÅ" : "FUKT AV"; b.classList.toggle("on", fukt.on);
+    fukt.tracks.forEach(t => { if (t.fx !== undefined) t.mute = !fukt.on; });
+    if (ctx && cur === fukt && !fukt.on) { const n = ctx.currentTime; gateG.gain.cancelScheduledValues(n); gateG.gain.setTargetAtTime(1, n, 0.01); jerkF.frequency.cancelScheduledValues(n); jerkF.frequency.setTargetAtTime(18000, n, 0.01); }
+    if (ctx && cur === fukt && fukt.on) gateG.gain.setTargetAtTime(1 - fukt.tracks[3].amt, ctx.currentTime, 0.01);
+    applyFukt(); fukt.draw();
+  };
+  box.appendChild(b); top.appendChild(box);
+};
+
+/* ===== Starta ===== */
+const DEMOS = { betong, armering, fukt };
+document.querySelectorAll("[data-demo]").forEach(el => buildDemo(el, DEMOS[el.dataset.demo]));
+function frame() {
+  if (cur && cur.running && ctx) {
+    const now = ctx.currentTime;
+    for (const t of cur.tracks) { let v = t.vis; while (t.vq.length && t.vq[0][0] <= now) v = t.vq.shift()[1]; t.vis = v; }
+    cur.draw();
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+window.addEventListener("resize", () => Object.values(DEMOS).forEach(d => d.draw()));
+</script>
+
+</body>
+</html>
