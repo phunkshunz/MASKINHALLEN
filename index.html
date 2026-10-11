@@ -57,9 +57,12 @@ p{margin:0;max-width:62ch}
 /* maskiner */
 section{padding-block:56px;border-top:1px solid var(--ln)}
 .sechead{display:grid;gap:10px;margin-bottom:34px}
-.machine{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.25fr);gap:32px;align-items:start;padding-block:30px}
+.machine{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;align-items:start;padding-block:34px}
 .machine+.machine{border-top:1px dashed var(--ln)}
-.mtext{display:grid;gap:14px;min-width:0}
+.mtext{display:grid;gap:12px 48px;min-width:0;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
+.mtext>.kind,.mtext>.mname,.mtext>p{grid-column:1}
+.mtext>ul{grid-column:2;grid-row:1/3;align-self:end}
+.mtext>.buy{grid-column:2;grid-row:3}
 .mname{font-family:var(--disp);font-weight:900;font-size:clamp(54px,8vw,84px);line-height:.85;color:var(--or)}
 .mname.cy{color:var(--cy)}
 .mname.gr{color:var(--gr)}
@@ -92,6 +95,46 @@ section{padding-block:56px;border-top:1px solid var(--ln)}
 .knob .kn{font-size:11px;font-weight:800;font-variant-numeric:tabular-nums}
 .dnote{font-size:11.5px;color:var(--mu)}
 .ab{margin-left:auto;display:flex;gap:6px;align-items:center}
+
+
+/* pluginfönstret */
+.winhost{min-width:0}
+.pwrap{position:relative;width:100%;overflow:hidden;border-radius:10px;border:1px solid var(--ln2);background:#121314;box-shadow:0 24px 60px rgba(0,0,0,.55)}
+.pwin{position:absolute;left:0;top:0;width:1280px;transform-origin:0 0;background:#121314;font-family:-apple-system,"Helvetica Neue",Helvetica,Arial,sans-serif;color:#d9d6cf;line-height:1.2}
+.pwin>*{position:absolute;box-sizing:border-box}
+.wp{background:#1a1c1e;border:1px solid #2c2f32;border-radius:6px}
+.wph{position:absolute;left:12px;right:12px;top:8px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;white-space:nowrap;overflow:hidden}
+.wph span{font-size:10px;color:#8b8e91;font-weight:400;overflow:hidden;text-overflow:ellipsis}
+.wt{white-space:nowrap;font-size:11px}
+.wt.logo{font-size:38px;font-weight:800;color:#ff8a1f;transform:scaleX(.8);transform-origin:0 0;line-height:1}
+.wt.lab{font-size:9px;color:#8b8e91;letter-spacing:.04em}
+.wt.ctr{transform:translateX(-50%)}
+.wt.bar{width:4px;height:43px;border-radius:2px;background:currentColor}
+.wt.bar.small{width:5px;height:14px}
+.wt.sq{width:8px;height:8px;border-radius:1px;background:currentColor}
+.wt.dot{width:12px;height:12px;border-radius:50%;background:currentColor;box-shadow:0 0 0 1.2px #8b8e91}
+.wt.selbox{width:226px;height:59px;border:1.6px solid #ff8a1f;border-radius:5px}
+.wb{display:flex;align-items:center;justify-content:center;gap:6px;background:#232527;border:1px solid #34383b;border-radius:4px;font-size:12.5px;font-weight:700;color:#d9d6cf;user-select:none;-webkit-user-select:none;white-space:nowrap;overflow:hidden}
+.wb.on{background:#ff8a1f;border-color:#ff8a1f;color:#121314}
+.wb.dice{border-color:#ff8a1f;color:#ff8a1f;justify-content:flex-start;padding-left:7px;gap:5px;font-size:11.5px}
+.wb.dice.solid{background:#ff8a1f;color:#121314}
+.wb .die{width:14px;height:14px;border:1.5px solid currentColor;border-radius:3px;flex:none}
+.wb.otext{color:#ff8a1f}
+.wc{display:flex;align-items:center;background:#232527;border:1px solid #34383b;border-radius:4px;font-size:13px;font-weight:700;padding:0 22px 0 8px;white-space:nowrap;overflow:hidden}
+.wc i{position:absolute;right:8px;top:50%;margin-top:-2px;border:4px solid transparent;border-top:5px solid #ff8a1f}
+.wc select{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:16px}
+.wk{display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+.wkl{font-size:9px;color:#8b8e91;margin-top:1px;white-space:nowrap;letter-spacing:-.01em}
+.wkv{font-size:11px;font-weight:700;white-space:nowrap}
+.wcv{display:block}
+.locked{opacity:.42;cursor:not-allowed}
+.wk.live{cursor:ns-resize;touch-action:none;filter:drop-shadow(0 0 7px rgba(79,209,224,.55))}
+.wb.live,.wc.live{cursor:pointer;box-shadow:0 0 0 2px rgba(79,209,224,.75),0 0 14px rgba(79,209,224,.35)}
+.wk.live:focus-visible,.wb.live:focus-visible{outline:2px solid #4fd1e0}
+.wtoast{left:50%;top:50%;transform:translate(-50%,-50%);background:#121314;border:1.5px solid #ff8a1f;border-radius:8px;padding:16px 22px;font-size:18px;z-index:5;white-space:nowrap;box-shadow:0 10px 40px rgba(0,0,0,.6)}
+.wtoast a{color:#4fd1e0}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:var(--mu)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
 
 /* paket */
 .packs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
@@ -130,6 +173,8 @@ footer{border-top:1px solid var(--ln);padding-block:28px 40px;display:flex;justi
 
 @media (max-width:860px){
   .machine,.about{grid-template-columns:minmax(0,1fr)}
+  .mtext{grid-template-columns:minmax(0,1fr)}
+  .mtext>*{grid-column:1!important;grid-row:auto!important}
   .packs{grid-template-columns:minmax(0,1fr)}
   .faq{grid-template-columns:minmax(0,1fr)}
 }
@@ -543,7 +588,7 @@ function tick() {
       if (t.rate === 1 && t.n % 2 === 1) when += (cur.swing || 0) * dur;
       if (cur.offset) when += cur.offset(t, dur);
       when = Math.max(now + 0.003, when);
-      if (st && st.on && !t.mute && Math.random() < (st.prob ?? 1)) t.play(when, st, dur, t);
+      if (st && st.on && !t.mute && Math.random() < (st.prob ?? 1)) { t.play(when, st, dur, t); t.lastHit = when; }
       t.vq.push([when, pos]);
       t.pos = (pos + 1) % t.len; t.n++;
       if (t.pos === 0 && cur.onWrap) cur.onWrap(t);
@@ -574,10 +619,434 @@ function knob(host, o) {
 }
 const pct = v => Math.round(v * 100) + " %";
 
+/* ===== Pluginfönstren: hela layouten, men bara några rattar är aktiva ===== */
+const NOTE = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+const COL = { or: "#ff8a1f", or2: "#c96a16", cy: "#4fd1e0", cy2: "#2ea7b5", gr: "#b9b6ae", tx: "#d9d6cf", mu: "#8b8e91", rs: "#232527", ln: "#2c2f32", ln2: "#34383b", pn: "#1a1c1e", gd: "#121314" };
+
+function mk(tag, cls, parent) { const e = document.createElement(tag); if (cls) e.className = cls; if (parent) parent.appendChild(e); return e; }
+function place(e, r) { e.style.left = r[0] + "px"; e.style.top = r[1] + "px"; if (r[2] != null) e.style.width = r[2] + "px"; if (r[3] != null) e.style.height = r[3] + "px"; }
+function arcP(cx, cy, r, a, b) {
+  if (b - a < 0.002) return "";
+  const P = v => { const t = (v * 270 - 135) * Math.PI / 180; return [cx + r * Math.sin(t), cy - r * Math.cos(t)]; };
+  const [x0, y0] = P(a), [x1, y1] = P(b);
+  return `M${x0.toFixed(2)} ${y0.toFixed(2)}A${r} ${r} 0 ${(b - a) * 270 > 180 ? 1 : 0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;
+}
+function showLocked(d) {
+  d.toast.hidden = false;
+  clearTimeout(d.toastT);
+  d.toastT = setTimeout(() => { d.toast.hidden = true; }, 2600);
+}
+function lockIt(e, d) {
+  e.classList.add("locked");
+  e.title = "Locked in the demo";
+  e.addEventListener("click", ev => { ev.stopPropagation(); showLocked(d); });
+}
+
+// ratt i pluginfönstret: bind = { get, set, fmt } gör den aktiv, annars låst med fast värde
+function wKnob(win, it, d) {
+  const w = mk("div", "wk", win); place(w, it.r);
+  const compact = !!it.compact, textH = compact ? 13 : 26;
+  const size = Math.max(16, Math.min(it.r[2], it.r[3] - textH));
+  const col = it.col === "cy" ? COL.cy : it.col === "gr" ? COL.gr : COL.or;
+  const c = size / 2, th = Math.max(2.5, size * 0.09), rr = c - th / 2 - 1;
+  w.innerHTML = `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><path d="${arcP(c, c, rr, 0, 1)}" stroke="${COL.ln}" stroke-width="${th}" fill="none"/><path class="v" stroke="${col}" stroke-width="${th}" fill="none"/><circle cx="${c}" cy="${c}" r="${Math.max(3, rr - th * 1.2)}" fill="${COL.rs}" stroke="${COL.ln2}"/><line class="p" x1="${c}" y1="${c}" stroke="#f2efe8" stroke-width="${Math.max(2, size * 0.06)}" stroke-linecap="round"/></svg>` +
+    (compact ? "" : `<div class="wkl">${it.label}</div>`) + `<div class="wkv"></div>`;
+  const vEl = w.querySelector(".v"), pEl = w.querySelector(".p"), tEl = w.querySelector(".wkv");
+  const draw = (v, txt) => {
+    vEl.setAttribute("d", arcP(c, c, rr, 0, v));
+    const t = (v * 270 - 135) * Math.PI / 180, L = Math.max(3, rr - th * 1.2) * 0.8;
+    pEl.setAttribute("x2", c + L * Math.sin(t)); pEl.setAttribute("y2", c - L * Math.cos(t));
+    tEl.textContent = txt;
+  };
+  if (it.bind) {
+    const b = it.bind;
+    w.classList.add("live"); w.tabIndex = 0; w.setAttribute("role", "slider"); w.setAttribute("aria-label", it.label);
+    w.update = () => draw(b.get(), b.fmt(b.get()));
+    let y0 = 0, v0 = 0;
+    w.addEventListener("pointerdown", e => { w.setPointerCapture(e.pointerId); y0 = e.clientY; v0 = b.get(); e.preventDefault(); });
+    w.addEventListener("pointermove", e => { if (!w.hasPointerCapture(e.pointerId)) return; b.set(clamp(v0 + (y0 - e.clientY) / 140)); syncKnobs(d); });
+    w.addEventListener("wheel", e => { e.preventDefault(); b.set(clamp(b.get() - Math.sign(e.deltaY) * 0.03)); syncKnobs(d); }, { passive: false });
+    w.addEventListener("keydown", e => { const s = { ArrowUp: 0.03, ArrowRight: 0.03, ArrowDown: -0.03, ArrowLeft: -0.03 }[e.key]; if (s) { e.preventDefault(); b.set(clamp(b.get() + s)); syncKnobs(d); } });
+    d.liveKnobs.push(w); w.update();
+  } else {
+    draw(it.p ?? 0.5, it.v ?? "");
+    lockIt(w, d);
+  }
+}
+function syncKnobs(d) { d.liveKnobs.forEach(k => k.update()); (d.knobEls || []).forEach(k => k.update()); }
+
+function wBtn(win, it, d) {
+  const b = mk("div", "wb" + (it.on ? " on" : "") + (it.dice ? " dice" : "") + (it.solid ? " solid" : "") + (it.orangeText ? " otext" : ""), win);
+  place(b, it.r);
+  b.innerHTML = (it.dice ? '<span class="die"></span>' : "") + `<span>${it.text}</span>`;
+  if (it.fs) b.style.fontSize = it.fs + "px";
+  if (it.action) { b.classList.add("live"); b.addEventListener("click", () => it.action(b)); if (it.init) it.init(b); }
+  else lockIt(b, d);
+  return b;
+}
+function wCombo(win, it, d) {
+  const c = mk("div", "wc", win); place(c, it.r);
+  const t = mk("span", "", c); t.textContent = it.text || "";
+  mk("i", "", c);
+  if (it.fs) c.style.fontSize = it.fs + "px";
+  if (it.preset) {
+    c.classList.add("live");
+    const s = mk("select", "", c); s.setAttribute("aria-label", "Preset");
+    d.presets.forEach((p, i) => { const o = mk("option", "", s); o.value = i; o.textContent = p.name; });
+    s.onchange = () => { d.load(+s.value); if (!(cur === d && d.running)) startDemo(d); };
+    d.presetCombos.push({ t, s });
+  } else if (it.dyn) { d.dyn.push(() => { t.textContent = it.dyn(); }); lockIt(c, d); }
+  else lockIt(c, d);
+}
+function wText(win, it, d) {
+  const t = mk("div", "wt" + (it.cls ? " " + it.cls : ""), win); place(t, it.r);
+  t.textContent = it.text || "";
+  if (it.size) t.style.fontSize = it.size + "px";
+  if (it.color) t.style.color = COL[it.color] || it.color;
+  if (it.bold) t.style.fontWeight = 700;
+  if (it.dyn) d.dyn.push(() => { t.textContent = it.dyn(); });
+}
+function wCanvas(win, it, d) {
+  const cv = mk("canvas", "wcv", win); place(cv, it.r);
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  cv.width = Math.round(it.r[2] * dpr * 1.5); cv.height = Math.round(it.r[3] * dpr * 1.5);
+  const g = cv.getContext("2d"); g.scale(cv.width / it.r[2], cv.height / it.r[3]);
+  d.canvases.push(() => it.draw(g, it.r[2], it.r[3], d));
+  if (it.locked !== false) lockIt(cv, d);
+}
+
+function buildWindow(host, d, spec) {
+  const wrap = mk("div", "pwrap", host);
+  wrap.style.aspectRatio = `1280 / ${spec.H}`;
+  const win = mk("div", "pwin", wrap);
+  win.style.height = spec.H + "px";
+  d.liveKnobs = []; d.dyn = []; d.canvases = []; d.presetCombos = []; d.playBtns = [];
+  spec.items.forEach(it => {
+    if (it.t === "panel") {
+      const p = mk("div", "wp", win); place(p, it.r);
+      if (it.title) { const h = mk("div", "wph", p); h.innerHTML = `<b>${it.title}</b>${it.sub ? `<span>${it.sub}</span>` : ""}`; }
+    }
+    else if (it.t === "knob") wKnob(win, it, d);
+    else if (it.t === "btn") wBtn(win, it, d);
+    else if (it.t === "combo") wCombo(win, it, d);
+    else if (it.t === "text") wText(win, it, d);
+    else if (it.t === "canvas") wCanvas(win, it, d);
+  });
+  const toast = mk("div", "wtoast", win); toast.hidden = true;
+  toast.innerHTML = `<b>Locked in the demo.</b> The full version has every knob. <a href="#paket">See prices</a>`;
+  d.toast = toast;
+  const fit = () => { win.style.transform = `scale(${wrap.clientWidth / 1280})`; };
+  fit();
+  if (window.ResizeObserver) new ResizeObserver(fit).observe(wrap); else window.addEventListener("resize", fit);
+}
+
+// gemensamma byggare för specarna
+function specBuilder() {
+  const L = [];
+  return {
+    L,
+    P: (r, title, sub) => L.push({ t: "panel", r, title, sub }),
+    K: (r, label, v, p, o = {}) => L.push({ t: "knob", r, label, v, p, ...o }),
+    B: (r, text, o = {}) => L.push({ t: "btn", r, text, ...o }),
+    C: (r, text, o = {}) => L.push({ t: "combo", r, text, ...o }),
+    T: (x, y, text, o = {}) => L.push({ t: "text", r: [x, y], text, ...o }),
+    V: (r, draw, o = {}) => L.push({ t: "canvas", r, draw, ...o }),
+  };
+}
+function playButton(d, label = "SPELA") {
+  return { action: () => (cur === d && d.running ? stopAll() : startDemo(d)), init: b => d.playBtns.push(b), on: false, text: label };
+}
+
+// stegrutnät för ett eller flera spår, ritat som i pluginen
+function gridDrawer(rowsFn, opts) {
+  return (g, W, H, d) => {
+    const rows = rowsFn(d), n = rows.length, gap = opts.rowGap, rh = (H - gap * (n - 1)) / n, cols = 32, cw = W / cols;
+    g.clearRect(0, 0, W, H);
+    rows.forEach((row, r) => {
+      const y = r * (rh + gap), len = row.len, col = row.col;
+      for (let i = 0; i < cols; i++) {
+        const x = i * cw + 1.5, w = cw - 3;
+        if (i >= len) { g.strokeStyle = COL.ln; g.setLineDash([2.5, 2.5]); g.lineWidth = 1; g.strokeRect(x + 0.5, y + 1.5, w - 1, rh - 3); g.setLineDash([]); continue; }
+        const st = row.steps[i];
+        if (st && st.on) {
+          g.globalAlpha = row.dim ? 0.45 : (st.acc ? 1 : 0.78);
+          g.fillStyle = st.acc ? col : col; g.fillRect(x, y + 1, w, rh - 2);
+          g.globalAlpha = 1;
+          g.fillStyle = COL.gd; g.textAlign = "center"; g.textBaseline = "middle";
+          if (st.acc && rh > 18) { g.font = "bold 9px sans-serif"; g.fillText("▲", x + w / 2, y + rh * 0.3); }
+          if (row.note && rh > 24 && cw > 22) { g.font = "10px sans-serif"; g.fillText(row.note(st), x + w / 2, y + rh * 0.75); }
+        } else { g.fillStyle = i % 4 === 0 ? "#2a2c2f" : COL.rs; g.fillRect(x, y + 1, w, rh - 2); }
+        if (row.vis === i) { g.strokeStyle = COL.tx; g.lineWidth = 2; g.strokeRect(x + 1, y + 2, w - 2, rh - 4); }
+      }
+    });
+  };
+}
+function noteOf(base) { return st => NOTE[(((base + ROOT + deg(st.note || 0)) % 12) + 12) % 12] + (Math.floor((base + ROOT + deg(st.note || 0)) / 12) - 1); }
+
+/* oscilloskop och mätare från en analysator på mastern */
+let anaNode = null, anaBuf = null;
+function analyser() {
+  if (!ctx) return null;
+  if (!anaNode) { anaNode = ctx.createAnalyser(); anaNode.fftSize = 2048; out.connect(anaNode); anaBuf = new Float32Array(anaNode.fftSize); }
+  anaNode.getFloatTimeDomainData(anaBuf);
+  return anaBuf;
+}
+function drawScope(g, W, H, d) {
+  g.fillStyle = "#0f1011"; g.fillRect(0, 0, W, H);
+  g.strokeStyle = COL.ln; g.lineWidth = 1;
+  for (let i = 1; i < 16; i++) { g.beginPath(); g.moveTo(i * W / 16, 2); g.lineTo(i * W / 16, H - 2); g.stroke(); }
+  g.beginPath(); g.moveTo(0, H / 2); g.lineTo(W, H / 2); g.stroke();
+  g.fillStyle = COL.mu; g.font = "9px sans-serif"; g.textAlign = "left"; g.textBaseline = "top"; g.fillText("OSCILLOSKOP", 8, 5);
+  const buf = cur === d && d.running ? analyser() : null;
+  g.strokeStyle = COL.or; g.lineWidth = 1.6; g.beginPath();
+  let s = 0;
+  if (buf) for (let i = 1; i < 700; i++) if (buf[i - 1] < 0 && buf[i] >= 0) { s = i; break; }
+  for (let x = 0; x < W; x++) {
+    const v = buf ? buf[s + Math.floor(x * 1.4)] || 0 : 0;
+    const y = H / 2 - clamp(v * 2.4, -1, 1) * H * 0.45;
+    x ? g.lineTo(x, y) : g.moveTo(x, y);
+  }
+  g.stroke();
+}
+function drawMeters(g, W, H, d) {
+  g.clearRect(0, 0, W, H);
+  let lvl = 0;
+  if (cur === d && d.running) { const b = analyser(); if (b) for (let i = 0; i < b.length; i += 4) lvl = Math.max(lvl, Math.abs(b[i])); }
+  d.meter = Math.max(lvl, (d.meter || 0) * 0.86);
+  const db = 20 * Math.log10(Math.max(1e-4, d.meter)), h = clamp((db + 48) / 48) * H;
+  [[2, 0.85], [20, 1]].forEach(([x, f]) => {
+    g.fillStyle = COL.rs; g.fillRect(x, 0, 12, H);
+    g.fillStyle = COL.cy; g.fillRect(x, H - h * f, 12, h * f);
+  });
+}
+
+/* ===== ARMERING-fönstret ===== */
+function specArmering(d) {
+  const { L, P, K, B, C, T, V } = specBuilder();
+  P([12, 12, 1256, 66]);
+  T(28, 20, "ARMERING", { cls: "logo" }); T(28, 60, "TECHNO SYNT · MASKINHALLEN", { size: 8.5, color: "mu" });
+  T(208, 26, "LJUD", { cls: "lab" }); T(366, 26, "MÖNSTER", { cls: "lab" }); T(524, 26, "EFFEKTER", { cls: "lab" });
+  C([208, 40, 150, 28], "", { preset: 1 }); C([366, 40, 150, 28], "", { dyn: () => d.presets[d.cur].name }); C([524, 40, 150, 28], "Kanalbas-eko");
+  B([682, 28, 62, 34], "LJUD", { dice: 1 }); B([749, 28, 52, 34], "FX", { dice: 1 }); B([806, 28, 88, 34], "MÖNSTER", { dice: 1 }); B([899, 28, 62, 34], "ALLT", { dice: 1, solid: 1 });
+  B([967, 28, 54, 34], "Ångra");
+  K([1052, 14, 58, 64], "GALENSKAP", "50 %", 0.5); K([1110, 14, 58, 64], "INTERNT BPM", "132.0", 0.52, { col: "cy" });
+  B([1172, 28, 80, 34], "SPELA", playButton(d));
+
+  P([12, 88, 250, 300], "SPÅR", "klick väljer · ▶ lyssnar");
+  const cards = [["BAS A", "Såg", "Acid · 320 Hz", COL.or, 1], ["BAS B", "Reese", "LP 24 · 180 Hz", COL.cy], ["STAB", "Supersåg · Moll 7", "LP 12 · 900 Hz", COL.cy2], ["LEAD", "Sync", "BP · 1.4 kHz", COL.gr]];
+  cards.forEach(([n, a, b, c, sel], i) => {
+    const y = 122 + i * 65;
+    L.push({ t: "panel", r: [24, y, 226, 59] });
+    L.push({ t: "text", r: [32, y + 8], text: "", cls: "bar", color: c });
+    T(44, y + 7, n, { size: 14, bold: 1 }); T(44, y + 26, a, { size: 10.5, color: "mu" }); T(44, y + 40, b, { size: 10.5, color: "mu" });
+    T(218, y + 17, "▶", { size: 16, color: "or" });
+    if (sel) L.push({ t: "text", r: [24, y], text: "", cls: "selbox" });
+  });
+
+  P([270, 88, 520, 300], "LJUDKÄLLA · BAS A", "vågform, ackord och karaktär");
+  ["Såg", "Fyrkant", "Puls", "Reese", "Supersåg", "FM", "Metall", "Sync"].forEach((n, i) => B([282 + i * 62, 122, 58, 28], n, { on: i === 0 }));
+  T(282, 157, "ACKORD", { cls: "lab" }); C([282, 170, 130, 28], "Ensam");
+  B([562, 170, 120, 28], "Slumpa spåret"); B([688, 170, 90, 28], "▶ Lyssna");
+  V([282, 206, 496, 78], drawScope);
+  [["KARAKTÄR", "25 %", 0.25], ["OKTAV", "0", 0.6], ["GATE", "55 %", 0.55], ["SLÄPP", "18 ms", 0.2], ["ACCENT", "80 %", 0.8], ["SLIDE", "70 ms", 0.4], ["VOLYM", "85 %", 0.57], ["PANORERA", "V 10", 0.45]]
+    .forEach(([n, v, p], i) => K([282 + i * 62, 292, 62, 84], n, v, p));
+
+  P([798, 88, 470, 300], "TECHNO-FILTER · BAS A", "LP 24 · LP 12 · HP · BP · Notch · Acid");
+  ["LP 24", "LP 12", "HP", "BP", "Notch", "Acid"].forEach((n, i) => B([810 + i * 75, 122, 71, 28], n, { on: i === 5 }));
+  K([810, 156, 89, 88], "CUTOFF", "", 0, { bind: d.knobs[0] }); K([899, 156, 89, 88], "RESONANS", "", 0, { bind: d.knobs[1] });
+  K([988, 156, 89, 88], "DRIVE", "35 %", 0.35); K([1077, 156, 89, 88], "ENV", "60 %", 0.6); K([1166, 156, 89, 88], "DECAY", "260 ms", 0.4);
+  K([810, 248, 89, 88], "LFO DJUP", "25 %", 0.25, { col: "cy" }); K([899, 248, 89, 88], "SÄND EKO", "15 %", 0.15, { col: "cy" }); K([988, 248, 89, 88], "SÄND RUM", "5 %", 0.05, { col: "cy" });
+  T(1081, 249, "LFO-TAKT", { cls: "lab" }); C([1081, 262, 171, 26], "4 takt"); T(1081, 291, "LFO-FORM", { cls: "lab" }); C([1081, 304, 171, 26], "Sinus");
+  C([810, 338, 446, 26], "Rattar för spåret…");
+
+  P([12, 396, 1256, 296], "SEQUENCER", "Dra upp/ner på ett steg = ton · Shift accent · Alt chans · Cmd ratchet · Högerklick meny");
+  ["PÅ/AV", "ACCENT", "SLIDE", "RATCHET", "CHANS", "TON ↑", "TON ↓"].forEach((n, i) => B([24 + i * 80, 447, 76, 28], n, { on: i === 0 }));
+  K([598, 430, 64, 62], "TRASSEL", "", 0, { bind: d.knobs[3] }); K([662, 430, 64, 62], "UR TAKT", "", 0, { bind: d.knobs[2], col: "cy" }); K([726, 430, 64, 62], "SWING", "56 %", 0.08);
+  B([800, 447, 84, 28], "Reda ut");
+  T(898, 439, "TONART", { cls: "lab" }); C([898, 452, 70, 26], "F"); T(976, 439, "SKALA", { cls: "lab" }); C([976, 452, 130, 26], "Frygisk");
+  const lanes = d.tracks.slice(0, 4);
+  lanes.forEach((t, i) => {
+    const y = 496 + i * 49;
+    L.push({ t: "text", r: [28, y + 6], text: "", cls: "sq", color: t.col });
+    T(42, y + 3, t.name, { size: 12.5, bold: 1, color: i === 0 ? "or" : "tx" });
+    B([26, y + 24, 22, 22], "−"); T(52, y + 28, "", { size: 10.5, color: "mu", dyn: () => t.len + " st" }); B([92, y + 24, 22, 22], "+");
+    C([120, y + 24, 52, 22], "", { dyn: () => (t.rate === 2 ? "1/8" : "1/16"), fs: 10.5 });
+    B([1152, y + 8, 26, 33], "M"); B([1182, y + 8, 28, 33], "S"); B([1214, y + 8, 40, 33], "Lås");
+  });
+  V([176, 499, 972, 49 * 4 - 6], gridDrawer(dd => dd.tracks.slice(0, 4).map(t => ({ steps: t.steps, len: t.len, col: t.col, vis: t.vis, note: noteOf(t.base) })), { rowGap: 6 }));
+
+  P([12, 700, 380, 108], "DUB-EKO"); P([400, 700, 330, 108], "RUM"); P([738, 700, 210, 108], "PERFORMANCE"); P([956, 700, 312, 108], "MASTER");
+  C([20, 724, 74, 28], "3/16"); B([20, 760, 74, 28], "Freeze");
+  [["ÅTERKOPPL.", "60 %", 0.63], ["TON", "45 %", 0.45], ["WOBBLE", "20 %", 0.2], ["NIVÅ", "45 %", 0.45]].forEach(([n, v, p], i) => K([94 + i * 72, 724, 72, 78], n, v, p, { col: "cy" }));
+  [["STORLEK", "70 %", 0.7], ["DRIVE", "30 %", 0.3], ["TON", "2.2 kHz", 0.6], ["PUMP", "60 %", 0.6], ["NIVÅ", "35 %", 0.35]].forEach(([n, v, p], i) => K([408 + i * 62, 724, 62, 78], n, v, p));
+  B([746, 724, 110, 32], "STUTTER"); C([862, 724, 78, 32], "1/16"); B([746, 762, 92, 32], "SNUBBLA"); B([844, 762, 96, 32], "TRASSLA NU");
+  [["SVEP", "Av", 0.5], ["GRUS", "0 %", 0], ["CLIPPER", "15 %", 0.15], ["UT", "0.0 dB", 0.8]].forEach(([n, v, p], i) => K([964 + i * 74, 724, 74, 78], n, v, p));
+  return { H: 820, items: L };
+}
+
+/* ===== FUKT-fönstret ===== */
+function specFukt(d) {
+  const { L, P, K, B, C, T, V } = specBuilder();
+  P([12, 12, 1256, 66]);
+  T(28, 20, "FUKT", { cls: "logo" }); T(28, 60, "TECHNO-RUMBLE · MASKINHALLEN", { size: 8.5, color: "mu" });
+  T(178, 26, "PRESET", { cls: "lab" }); C([178, 40, 210, 28], "", { preset: 1 });
+  B([400, 28, 84, 34], "SVÄNG", { dice: 1 }); B([490, 28, 64, 34], "LJUD", { dice: 1 }); B([560, 28, 64, 34], "ALLT", { dice: 1, solid: 1 }); B([638, 28, 58, 34], "Ångra");
+  K([844, 14, 66, 64], "GALENSKAP", "50 %", 0.5); K([910, 12, 72, 66], "OBALANS", "", 0, { bind: d.knobs[0], col: "cy" });
+  K([982, 14, 64, 64], "INTERNT BPM", "130.0", 0.5, { col: "cy" }); K([1046, 14, 60, 64], "MIX", "100 %", 1);
+  V([1116, 22, 34, 38], drawMeters); T(1118, 62, "IN   UT", { size: 8.5, color: "mu" });
+  B([1160, 28, 92, 34], "SPELA", playButton(d));
+
+  P([12, 88, 390, 200], "GRUSKROSS", "krossar bas, mellan och topp var för sig");
+  [["BAS", "Rör", 27], ["MELLAN", "Rör", 120], ["TOPP", "Krossa", 213]].forEach(([n, ty, x], b) => {
+    T(x, 121, n, { cls: "lab" }); C([x, 134, 87, 26], ty);
+    K([x, 166, 43, 110], "DRIVE", ["20 %", "25 %", "10 %"][b], [0.2, 0.25, 0.1][b]); K([x + 43, 166, 44, 110], "NIVÅ", "100 %", 0.67, { col: "gr" });
+  });
+  K([304, 150, 86, 110], "GRUS", "", 0, { bind: d.knobs[1] });
+
+  P([410, 88, 290, 200], "RUMBLE", "andas när spåret säger till");
+  K([422, 148, 53, 110], "STORLEK", "75 %", 0.75); K([475, 148, 53, 110], "DRIVE", "50 %", 0.5); K([528, 148, 53, 110], "TON", "110 Hz", 0.45);
+  K([581, 148, 53, 110], "SÄNDNING", "5 %", 0.05); K([634, 148, 53, 110], "NIVÅ", "", 0, { bind: d.knobs[2] });
+
+  P([708, 88, 330, 200], "DUB-EKO", "ping-pong med filter i ekot");
+  T(720, 122, "TID", { cls: "lab" }); C([720, 134, 68, 26], "3/16"); B([720, 170, 68, 28], "Freeze");
+  K([788, 155, 47, 100], "ÅTERKOPPL.", "", 0, { bind: d.knobs[3], col: "cy" });
+  [["TON", "45 %", 0.45], ["WOBBLE", "25 %", 0.25], ["SÄNDNING", "5 %", 0.05], ["NIVÅ", "50 %", 0.5]].forEach(([n, v, p], i) => K([835 + i * 47.6, 155, 47, 100], n, v, p, { col: "cy" }));
+
+  P([1046, 88, 222, 200], "FILTER-RYCK · HACK");
+  T(1058, 122, "TYP", { cls: "lab" }); C([1058, 134, 92, 24], "LP"); T(1058, 162, "RIKTNING", { cls: "lab" }); C([1058, 174, 92, 24], "Öppnar");
+  T(1058, 202, "HACK-BIT", { cls: "lab" }); C([1058, 214, 92, 24], "1/32");
+  K([1156, 134, 100, 75], "BAS", "900 Hz", 0.45); K([1156, 209, 100, 67], "RESONANS", "55 %", 0.55);
+
+  P([12, 296, 1256, 420], "SVÄNG", "Klick på/av · dra för att måla · Shift accent · Alt chans · Högerklick meny · klick på namnet slår av/på spåret");
+  K([24, 330, 70, 64], "SPÅRVIDD", "60 %", 0.6); K([94, 330, 70, 64], "TRASSEL", "20 %", 0.2); K([164, 330, 70, 64], "UR TAKT", "30 %", 0.3, { col: "cy" }); K([234, 330, 70, 64], "SPÖKNOTER", "25 %", 0.25);
+  T(318, 341, "ÅTERSAMLING", { cls: "lab" }); C([318, 354, 110, 26], "4 takter"); T(438, 341, "VANDRING", { cls: "lab" }); C([438, 354, 110, 26], "4 takter");
+  B([558, 354, 70, 26], "Fras", { on: 1 }); B([638, 354, 90, 26], "Reda ut");
+  ["MÄNGD", "LÄNGD", "HÄNG", "SWING"].forEach((n, i) => T(964 + i * 48, 397, n, { cls: "lab ctr" }));
+  const fx = d.tracks.filter(t => t.fx !== undefined);
+  const rows = [
+    ["GATE", "hackar volymen", COL.gr, fx[0]], ["FILTER-RYCK", "filtret rycker till", COL.or, fx[1]], ["EKO-KAST", "kastar ett slag i ekot", COL.cy, fx[2]],
+    ["RUMBLE-ANDETAG", "rumblen andas in", COL.or2, fx[3]], ["GRUS-BLIPP", "kort krossning", COL.cy2, null], ["HACK", "avstängd · klicka för på", COL.gr, null],
+  ];
+  rows.forEach(([n, hint, c, t], i) => {
+    const y = 410 + i * 49;
+    L.push({ t: "text", r: [28, y + 16], text: "", cls: "dot", color: i === 5 ? "transparent" : c });
+    T(46, y + 9, n, { size: 12, bold: 1, color: i === 5 ? "mu" : "tx" }); T(46, y + 26, hint, { size: 8.5, color: "mu" });
+    const stat = [[12, 3, 2], [32, 1, 28]][i - 4];
+    [["STEG", 0], ["SLAG", 1], ["ROT", 2]].forEach(([lab, k], j) => {
+      L.push({ t: "panel", r: [178 + j * 47, y + 3, 44, 43] });
+      T(178 + j * 47 + 22, y + 7, lab, { cls: "lab ctr", size: 8.5 });
+      T(178 + j * 47 + 22, y + 22, "", { cls: "ctr", size: 12.5, bold: 1, dyn: () => t ? [t.len, t.hits, t.rot][k] : stat[k] });
+    });
+    C([319, y + 11, 72, 26], i === 1 ? "1/8" : "1/16");
+    [["55 %", 0.55], ["45 %", 0.45], ["sent 22 %", 0.72], ["62 %", 0.62]].forEach(([v, p], k) => K([964 + k * 48, y + 3, 48, 43], "", v, p, { compact: 1, col: k >= 2 ? "cy" : (i === 0 ? "gr" : "or") }));
+    B([1162, y + 11, 26, 26], "M"); B([1191, y + 11, 26, 26], "S"); B([1220, y + 11, 36, 26], "Lås");
+  });
+  V([399, 413, 557, 49 * 6 - 6], gridDrawer(dd => {
+    const f = dd.tracks.filter(t => t.fx !== undefined);
+    return [
+      ...f.map(t => ({ steps: t.steps, len: t.len, col: t.col, vis: t.vis })),
+      { steps: euclid(3, 12, 2).map(s => ({ ...s })), len: 12, col: COL.cy2, vis: -1, dim: 1 },
+      { steps: euclid(1, 32, 28), len: 32, col: COL.gr, vis: -1, dim: 1 },
+    ];
+  }, { rowGap: 6 }));
+
+  P([12, 724, 360, 124], "PUMP"); P([380, 724, 290, 124], "RÖRELSE"); P([678, 724, 250, 124], "PERFORMANCE", "håll inne"); P([936, 724, 320, 124], "MASTER");
+  T(24, 754, "TAKT", { cls: "lab" }); C([24, 766, 81, 26], "1/4"); T(111, 754, "FORM", { cls: "lab" }); C([111, 766, 81, 26], "Mjuk"); T(198, 754, "PUMPAR", { cls: "lab" }); C([198, 766, 81, 26], "Bara rumble", { fs: 11 });
+  K([280, 766, 80, 70], "DJUP", "35 %", 0.35);
+  T(392, 754, "FILTER-TAKT", { cls: "lab" }); C([392, 766, 80, 26], "4 takt"); K([476, 762, 49, 74], "FILTER", "0 %", 0, { col: "cy" });
+  T(525, 754, "PAN-TAKT", { cls: "lab" }); C([525, 766, 80, 26], "1 takt"); K([609, 762, 49, 74], "PAN", "0 %", 0, { col: "cy" });
+  B([692, 763, 109, 32], "KROSSA"); B([803, 763, 109, 32], "DRÄNK"); B([692, 801, 109, 32], "SNUBBLA"); B([803, 801, 109, 32], "TUNNEL");
+  B([948, 782, 74, 28], "Bas-mono", { on: 1 });
+  [["SVEP", "Av", 0.5], ["GRUS", "0 %", 0], ["CLIPPER", "15 %", 0.15], ["UT", "0.0 dB", 0.8]].forEach(([n, v, p], i) => K([1028 + i * 54, 756, 54, 80], n, v, p));
+  return { H: 860, items: L };
+}
+
+/* ===== BETONG-fönstret ===== */
+const PAD_NAMES = ["Industrial Crushed", "Rumble Tone F", "Industrial 6bit", "Open", "Clap Gated", "Snare Noise Industrial", "Tom Low", "Tom Mid", "Woodblock 6bit", "Metal FM", "Rim", "Shaker", "Reese Dist F", "Crushed Noise Chord", "Industrial Noise", "Metal Slam"];
+const PAD_OF_TRACK = { KICK: 0, HAT: 2, CLAP: 4, PERC: 8, TOM: 6, RIM: 10 };
+function drawPads(g, W, H, d) {
+  g.clearRect(0, 0, W, H);
+  const cols = 8, gap = 6, w = (W - gap * 7) / cols, h = (H - gap) / 2, now = ctx ? ctx.currentTime : 0;
+  const hit = {};
+  if (cur === d && d.running) d.tracks.forEach(t => { if (t.lastHit && now - t.lastHit < 0.14 && now >= t.lastHit) hit[PAD_OF_TRACK[t.name]] = t.col; });
+  for (let i = 0; i < 16; i++) {
+    const x = (i % cols) * (w + gap), y = Math.floor(i / cols) * (h + gap);
+    g.fillStyle = hit[i] ? "#34302b" : COL.rs; g.fillRect(x, y, w, h);
+    g.strokeStyle = i === 0 ? COL.or : COL.ln2; g.lineWidth = i === 0 ? 2 : 1; g.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
+    g.fillStyle = hit[i] || [COL.or, "#5c5f62", COL.or2, "#5c5f62", "#5c5f62", "#5c5f62", COL.gr, "#5c5f62", COL.cy, "#5c5f62", "#5c5f62", COL.cy2, COL.or, COL.cy, "#5c5f62", "#5c5f62"][i];
+    g.fillRect(x + 8, y + 6, w - 16, 3);
+    g.fillStyle = COL.tx; g.font = "bold 10.5px sans-serif"; g.textAlign = "left"; g.textBaseline = "top";
+    const words = PAD_NAMES[i].split(" "); let line = "", ly = y + 14;
+    words.forEach(wd => { const t = line ? line + " " + wd : wd; if (g.measureText(t).width > w - 14 && line) { g.fillText(line, x + 8, ly); ly += 12; line = wd; } else line = t; });
+    g.fillText(line, x + 8, ly);
+    g.fillStyle = COL.mu; g.font = "9px sans-serif"; g.fillText("PAD " + (i + 1), x + 8, y + h - 14);
+  }
+}
+function drawWave(g, W, H) {
+  g.fillStyle = "#1c130b"; g.fillRect(0, 0, W, H);
+  g.strokeStyle = COL.or; g.lineWidth = 1;
+  for (let x = 0; x < W; x += 1.2) {
+    const ph = (x / W) * 38 * Math.PI * 2, env = 0.55 + 0.4 * Math.abs(Math.sin(x / W * Math.PI * 19));
+    const a = Math.abs(Math.sin(ph / 2)) * env * H * 0.46;
+    g.beginPath(); g.moveTo(x, H / 2 - a); g.lineTo(x, H / 2 + a); g.stroke();
+  }
+  g.fillStyle = COL.or; g.fillRect(0, 0, 2, H); g.fillRect(W - 2, 0, 2, H);
+}
+function specBetong(d) {
+  const { L, P, K, B, C, T, V } = specBuilder();
+  P([16, 16, 1248, 64]);
+  T(32, 22, "BETONG", { cls: "logo" }); T(32, 62, "TECHNO SAMPLER · MASKINHALLEN", { size: 8.5, color: "mu" });
+  C([182, 32, 150, 32], "Industriell 909"); C([338, 32, 150, 32], "", { preset: 1 }); C([494, 32, 152, 32], "Fuktigt Betonggolv");
+  B([656, 30, 64, 36], "KIT", { dice: 1 }); B([724, 30, 58, 36], "FX", { dice: 1 }); B([786, 30, 102, 36], "MÖNSTER", { dice: 1 });
+  B([892, 30, 72, 36], "ALLT", { dice: 1, solid: 1, action: () => d.randomize() }); B([970, 30, 58, 36], "Ångra");
+  K([1036, 20, 58, 56], "GALENSKAP", "", 0, { bind: d.knobs[3] }); K([1094, 20, 58, 56], "SWING", "", 0, { bind: d.knobs[0] });
+  T(1158, 26, "BPM", { size: 9, color: "mu" }); T(1158, 40, "", { size: 26, bold: 1, dyn: () => d.bpm.toFixed(1) });
+
+  P([16, 92, 784, 128], "SAMPLING · PAD 1");
+  B([238, 100, 86, 24], "Ladda ljud", { fs: 11 }); B([330, 100, 80, 24], "Bibliotek", { fs: 11 }); C([416, 100, 98, 24], "Anslag", { fs: 11 });
+  B([520, 101, 136, 22], "0.60 känslighet", { fs: 11, cls: "" }); B([662, 100, 126, 24], "Hacka till pads", { fs: 11, orangeText: 1 });
+  V([28, 130, 760, 82], drawWave);
+  P([16, 232, 784, 156], "PADS", "Klick spelar · högerklick väljer ljud · dra in filer");
+  V([28, 264, 760, 116], drawPads);
+
+  P([812, 92, 452, 296], "TECHNO-FILTER · SPÅR 1", "PAD 1");
+  C([824, 124, 110, 24], "Av");
+  [["CUTOFF", "18.0 kHz", 1], ["RESONANS", "15 %", 0.15], ["DRIVE", "44 %", 0.44], ["ENVELOPE", "0 %", 0], ["DECAY", "150 ms", 0.4]].forEach(([n, v, p], i) => K([824 + i * 85, 154, 85, 70], n, v, p, { col: i === 4 ? "cy" : "or" }));
+  [["CRUSH", "0 %", 0], ["SÄND DELAY", "0 %", 0]].forEach(([n, v, p], i) => K([824 + i * 85, 224, 85, 70], n, v, p));
+  K([994, 224, 85, 70], "SÄND RUMBLE", "", 0, { bind: d.knobs[1], col: "cy" });
+  K([1079, 224, 85, 70], "VOLYM", "100 %", 0.67); K([1164, 224, 85, 70], "PANORERING", "C", 0.5);
+  K([828, 302, 85, 70], "PITCH", "0 st", 0.5); K([913, 302, 85, 70], "DECAY", "100 %", 1); B([1008, 322, 110, 30], "Baklänges");
+
+  P([16, 400, 1248, 296], "SEQUENCER", "Klick på/av · Shift accent · Alt sannolikhet · Cmd ratchet · Högerklick meny");
+  const names = d.tracks.map(t => t.name).concat(["REESE DIST F", "CRUSHED NOISE C"]);
+  names.forEach((n, i) => {
+    const y = 432 + i * 32, t = d.tracks[i];
+    L.push({ t: "text", r: [32, y + 9], text: "", cls: "bar small", color: t ? t.col : (i === 6 ? COL.or : COL.cy) });
+    T(42, y + 9, (i + 1) + " " + n, { size: 11, bold: 1, color: i === 0 ? "or" : "tx" });
+    C([148, y + 3, 70, 26], "Pad " + [1, 3, 5, 9, 7, 11, 13, 14][i], { fs: 11 });
+    T(224, y + 8, "", { size: 13, bold: 1, dyn: () => t ? t.len : 16 });
+    C([286, y + 3, 70, 26], "1/16", { fs: 11 }); B([361, y + 3, 26, 26], "E", { fs: 11 });
+    T(395, y + 8, "", { size: 13, bold: 1, dyn: () => t ? t.steps.filter(s => s.on).length : 0 }); T(458, y + 8, "0", { size: 13, bold: 1 });
+    B([1156, y + 3, 28, 26], "M", { fs: 11 }); B([1186, y + 3, 28, 26], "S", { fs: 11 }); B([1216, y + 3, 34, 26], "Lås", { fs: 11 });
+  });
+  V([518, 435, 632, 32 * 8 - 6], gridDrawer(dd => dd.tracks.map(t => ({ steps: t.steps, len: t.len, col: t.col, vis: t.vis })).concat([
+    { steps: [], len: 16, col: COL.or, vis: -1 }, { steps: [], len: 16, col: COL.cy, vis: -1 }]), { rowGap: 6 }));
+
+  P([16, 708, 340, 96], "DUB-DELAY"); P([364, 708, 300, 96], "RUMBLE"); P([672, 708, 270, 96], "MASTER"); P([950, 708, 314, 96], "PERFORMANCE · INTERNT TEMPO");
+  C([26, 732, 84, 26], "3/16"); B([26, 764, 84, 26], "Freeze");
+  [["ÅTERKOPPL.", "62 %", 0.65], ["TON", "35 %", 0.35], ["WOBBLE", "35 %", 0.35], ["NIVÅ", "45 %", 0.45]].forEach(([n, v, p], i) => K([116 + i * 57.5, 732, 57, 66], n, v, p, { col: "cy" }));
+  [["STORLEK", "90 %", 0.9], ["DRIVE", "60 %", 0.6], ["CUTOFF", "105 Hz", 0.5], ["DUCK", "90 %", 0.9], ["NIVÅ", "80 %", 0.8]].forEach(([n, v, p], i) => K([374 + i * 56, 732, 56, 66], n, v, p));
+  K([682, 732, 62, 66], "SVEP", "", 0, { bind: d.knobs[2] });
+  [["GRUS", "8 %", 0.08], ["CLIPPER", "25 %", 0.25], ["UT", "0.0 dB", 0.8]].forEach(([n, v, p], i) => K([744 + i * 62, 732, 62, 66], n, v, p));
+  B([962, 745, 68, 44], "STUTTER", { orangeText: 1 }); C([1036, 754, 64, 26], "1/16", { fs: 11 });
+  B([1108, 745, 78, 44], "SPELA", playButton(d)); K([1192, 730, 60, 74], "TEMPO", "", 0, { col: "cy", bind: { get: () => (d.bpm - 100) / 50, set: v => { d.bpm = 100 + v * 50; }, fmt: v => (100 + v * 50).toFixed(1) } });
+  return { H: 820, items: L };
+}
+
+/* ===== Demo: verktygsrad + pluginfönster ===== */
 function buildDemo(el, d) {
-  el.innerHTML = `<div class="dtop"><button class="play">▶ PLAY</button><div class="presets"></div></div>
-    <canvas class="grid" height="150"></canvas><div class="knobs"></div><p class="dnote">${d.note}</p>`;
-  d.el = el;
+  el.innerHTML = `<div class="dtop"><button class="play">▶ PLAY</button><div class="presets"></div></div><div class="winhost"></div><div class="legend"><span><i style="background:#4fd1e0"></i>Glowing controls work in the demo</span><span><i style="background:#3a3e42"></i>Dimmed controls are locked</span></div><p class="dnote">${d.note}</p>`;
+  d.el = el; d.cur = 0;
   d.playBtn = el.querySelector(".play");
   d.playBtn.onclick = () => (cur === d && d.running ? stopAll() : startDemo(d));
   const pr = el.querySelector(".presets");
@@ -587,31 +1056,17 @@ function buildDemo(el, d) {
     pr.appendChild(b); return b;
   });
   if (d.extra) d.extra(el.querySelector(".dtop"));
-  const kh = el.querySelector(".knobs");
-  d.knobEls = d.knobs.map(k => knob(kh, k));
-  d.canvas = el.querySelector("canvas");
-  d.draw = () => drawGrid(d);
+  d.knobEls = [];
+  const spec = d === armering ? specArmering(d) : d === fukt ? specFukt(d) : specBetong(d);
+  buildWindow(el.querySelector(".winhost"), d, spec);
+  d.draw = () => {
+    d.canvases.forEach(f => f());
+    d.dyn.forEach(f => f());
+    d.presetCombos.forEach(({ t, s }) => { t.textContent = d.presets[d.cur].name; s.value = d.cur; });
+    const on = cur === d && d.running;
+    d.playBtns.forEach(b => { b.classList.toggle("on", on); b.querySelector("span").textContent = on ? "STOPP" : "SPELA"; });
+  };
   d.load(0);
-}
-function drawGrid(d) {
-  const cv = d.canvas, dpr = window.devicePixelRatio || 1, W = cv.clientWidth || 400, rows = d.tracks.length;
-  const H = Math.max(110, rows * 22 + 8);
-  if (cv.width !== Math.round(W * dpr) || cv.height !== Math.round(H * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); cv.style.height = H + "px"; }
-  const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0);
-  g.fillStyle = "#0f1011"; g.fillRect(0, 0, W, H);
-  const labelW = W < 420 ? 52 : 74, cols = 16, cw = (W - labelW - 8) / cols, rh = (H - 8) / rows;
-  g.font = "600 10px 'JetBrains Mono', monospace"; g.textBaseline = "middle";
-  d.tracks.forEach((t, r) => {
-    const y = 4 + r * rh;
-    g.fillStyle = t.mute ? "#5c5f62" : "#8b8e91"; g.fillText(t.name, 6, y + rh / 2);
-    for (let i = 0; i < cols; i++) {
-      const x = labelW + i * cw, st = t.steps[i], inside = i < t.len;
-      if (!inside) { g.strokeStyle = "#2c2f32"; g.setLineDash([2, 2]); g.strokeRect(x + 1.5, y + 2.5, cw - 3, rh - 5); g.setLineDash([]); continue; }
-      g.fillStyle = st && st.on ? (st.acc ? t.col : t.col + "bb") : (i % 4 === 0 ? "#2a2c2f" : "#232527");
-      g.fillRect(x + 1, y + 2, cw - 2, rh - 4);
-      if (t.vis === i) { g.strokeStyle = "#d9d6cf"; g.lineWidth = 1.6; g.strokeRect(x + 1.5, y + 2.5, cw - 3, rh - 5); g.lineWidth = 1; }
-    }
-  });
 }
 
 /* ===== BETONG-demo: trummor ===== */
@@ -636,7 +1091,7 @@ betong.load = function (i) {
   const p = this.presets[i]; this.bpm = p.bpm; this.swing = p.swing; this.rumbleAmt = p.rumble;
   this.tracks.forEach(t => { const s = p.t[t.name]; t.len = s[0]; t.steps = parse(s[1], s[2]); if (t.pos >= t.len) t.pos = 0; });
   this.presetBtns.forEach((b, k) => b.classList.toggle("on", k === i));
-  this.knobEls && this.knobEls.forEach(k => k.update()); this.draw();
+  this.cur = i; if (this.liveKnobs) syncKnobs(this); this.draw();
 };
 betong.onStart = () => { betong.tracks.forEach(t => t.dest = master); setMasterLP(betong.filt); };
 betong.onStop = () => setMasterLP(1);
@@ -649,7 +1104,11 @@ betong.knobs = [
 ];
 betong.extra = top => {
   const b = document.createElement("button"); b.className = "dice"; b.textContent = "⚄ RANDOMIZE";
-  b.onclick = () => {
+  b.onclick = () => betong.randomize();
+  top.appendChild(b);
+};
+betong.randomize = () => {
+  {
     const g = betong.crazy, odd = [5, 7, 9, 11, 13, 12, 15];
     betong.tracks.forEach((t, i) => {
       if (i === 0) { t.len = 16; t.steps = parse(Math.random() < g * 0.5 ? "X...x...x...x..p" : "X...x...x...x..."); return; }
@@ -661,8 +1120,7 @@ betong.extra = top => {
     });
     betong.presetBtns.forEach(x => x.classList.remove("on")); betong.draw();
     if (!(cur === betong && betong.running)) startDemo(betong);
-  };
-  top.appendChild(b);
+  }
 };
 
 /* ===== ARMERING-demo: syntar ===== */
@@ -712,7 +1170,7 @@ armering.load = function (i) {
     if (t.pos >= t.len) t.pos = 0;
   });
   this.presetBtns.forEach((b, k) => b.classList.toggle("on", k === i));
-  this.knobEls && this.knobEls.forEach(k => k.update()); this.draw();
+  this.cur = i; if (this.liveKnobs) syncKnobs(this); this.draw();
 };
 armering.onStart = () => armering.tracks.forEach(t => t.dest = master);
 // ur takt: varje spår svajar runt takten, kicken står still
@@ -776,14 +1234,14 @@ fukt.tracks[2].nextSlides = () => { const t = fukt.tracks[2], s = t.steps[(t.pos
 fukt.load = function (i) {
   const p = this.presets[i]; this.obalans = p.obalans; this.grus = p.grus; this.rumble = p.rumble; this.eko = p.eko; this.fcut = p.fcut;
   this.tracks.filter(t => t.fx !== undefined).forEach(t => {
-    const [len, hits, rot, amt, hold] = p.fx[t.fx]; t.len = len; t.amt = amt; t.hold = hold;
+    const [len, hits, rot, amt, hold] = p.fx[t.fx]; t.len = len; t.amt = amt; t.hold = hold; t.hits = hits; t.rot = rot;
     t.steps = euclid(hits, len, rot); if (t.fx === 0) t.steps[0].on = 1; // gaten öppnar alltid på ettan
     if (t.steps.find(s => s.on)) t.steps.find(s => s.on).acc = 1;
     if (t.pos >= t.len) t.pos = 0;
   });
   applyFukt();
   this.presetBtns.forEach((b, k) => b.classList.toggle("on", k === i));
-  this.knobEls && this.knobEls.forEach(k => k.update()); this.draw();
+  this.cur = i; if (this.liveKnobs) syncKnobs(this); this.draw();
 };
 function applyFukt() {
   if (!ctx) return;
