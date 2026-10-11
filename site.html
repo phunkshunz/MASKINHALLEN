@@ -224,7 +224,7 @@ footer{border-top:1px solid var(--ln);padding-block:28px 40px;display:flex;justi
           <li>16 pads, 103 original 24-bit sounds</li>
           <li>8-track sequencer: Euclidean, ratchet, probability</li>
           <li>Techno filter, dub delay, rumble and stutter</li>
-          <li>12 kits, 50 patterns, 50 effect presets</li>
+          <li>20 kits, 68 patterns, 54 effect presets</li>
         </ul>
         <div class="buy"><span class="price">39 €</span><a class="btn solid" data-buy="betong" href="#paket">Buy BETONG</a></div>
       </div>
@@ -240,7 +240,7 @@ footer{border-top:1px solid var(--ln);padding-block:28px 40px;display:flex;justi
           <li>Saw, square, pulse, reese, supersaw, FM, metal and sync</li>
           <li>Acid filter with accent and slide</li>
           <li>Drift, tangle and untangle</li>
-          <li>9 sounds, 8 patterns, 7 knob presets</li>
+          <li>22 sounds, 22 patterns, 11 effect presets, 10 filter presets</li>
         </ul>
         <div class="buy"><span class="price">39 €</span><a class="btn solid" data-buy="armering" href="#paket">Buy ARMERING</a></div>
       </div>
@@ -463,12 +463,16 @@ function initAudio() {
 function osc(type, f, t) { const o = ctx.createOscillator(); o.type = type; o.frequency.setValueAtTime(f, t); return o; }
 function noise(t) { const s = ctx.createBufferSource(); s.buffer = noiseBuf; s.loop = true; s.start(t, Math.random() * 1.5); return s; }
 function env(g, t, peak, dec, atk = 0.002) { g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(peak, t + atk); g.gain.setTargetAtTime(0, t + atk, dec); }
-function duck(t) { const g = rumbleDuck.gain; g.cancelScheduledValues(t); g.setValueAtTime(0.15, t); g.setTargetAtTime(1, t + 0.03, 0.12); }
+let synthBus = null;
+function duck(t) {
+  const g = rumbleDuck.gain; g.cancelScheduledValues(t); g.setValueAtTime(0.15, t); g.setTargetAtTime(1, t + 0.03, 0.12);
+  if (synthBus) { const b = synthBus.gain; b.cancelScheduledValues(t); b.setValueAtTime(0.32, t); b.setTargetAtTime(1, t + 0.02, 0.07); }
+}
 
 const V = {
   kick(t, st, dur, tr) {
     const p = tr.p || {}, o = osc("sine", 160, t), g = ctx.createGain(), sh = ctx.createWaveShaper();
-    o.frequency.exponentialRampToValueAtTime(p.low || 47, t + 0.085);
+    o.frequency.exponentialRampToValueAtTime(p.low || 44, t + 0.09);
     sh.curve = tanhCurve(1 + (p.drive || 0.3) * 4);
     env(g, t, st.acc ? 0.95 : 0.8, 0.09 + (p.decay || 0.4) * 0.12, 0.001);
     o.connect(sh).connect(g).connect(tr.dest);
@@ -988,7 +992,7 @@ function specBetong(d) {
   const { L, P, K, B, C, T, V } = specBuilder();
   P([16, 16, 1248, 64]);
   T(32, 22, "BETONG", { cls: "logo" }); T(32, 62, "TECHNO SAMPLER · MASKINHALLEN", { size: 8.5, color: "mu" });
-  C([182, 32, 150, 32], "Industriell 909"); C([338, 32, 150, 32], "", { preset: 1 }); C([494, 32, 152, 32], "Fuktigt Betonggolv");
+  C([182, 32, 150, 32], "", { dyn: () => d.presets[d.cur].kit || "Industriell 909" }); C([338, 32, 150, 32], "", { preset: 1 }); C([494, 32, 152, 32], "Fuktigt Betonggolv");
   B([656, 30, 64, 36], "KIT", { dice: 1 }); B([724, 30, 58, 36], "FX", { dice: 1 }); B([786, 30, 102, 36], "MÖNSTER", { dice: 1 });
   B([892, 30, 72, 36], "ALLT", { dice: 1, solid: 1, action: () => d.randomize() }); B([970, 30, 58, 36], "Ångra");
   K([1036, 20, 58, 56], "GALENSKAP", "", 0, { bind: d.knobs[3] }); K([1094, 20, 58, 56], "SWING", "", 0, { bind: d.knobs[0] });
@@ -1066,11 +1070,11 @@ const betong = {
   bpm: 132, swing: 0.1, rumbleAmt: 0.5, filt: 1, crazy: 0.5,
   note: "Demo: six synthesized drum tracks in your browser. BETONG has 16 pads with 103 real sounds, eight tracks, sampling and 50 patterns.",
   presets: [
-    { name: "Fabriksgolv", bpm: 132, swing: 0.1, rumble: 0.55, t: { KICK: [16, "X...x...x...x..."], HAT: [16, "..x...x...x...X."], CLAP: [16, "....x.......x..."], PERC: [7, "x..x.x.", [7, 4, 9]], TOM: [13, "x....x..x....", [0, 2, -1]], RIM: [5, "..x.x"] } },
-    { name: "Minus Loop", bpm: 128, swing: 0.18, rumble: 0.3, t: { KICK: [16, "x...x...x...x..."], HAT: [12, "..x..x..x.xx"], CLAP: [16, "................"], PERC: [5, "x..p.", [9, 7]], TOM: [16, "................"], RIM: [11, "x....x....."] } },
-    { name: "Skev 5/7", bpm: 134, swing: 0.05, rumble: 0.5, t: { KICK: [16, "X...x...x...x..p"], HAT: [7, "x.x.X.x"], CLAP: [5, "..x.."], PERC: [7, "x.xx.x.", [0, 7, 3, 10]], TOM: [11, "x...x.x....", [0, -2, 2]], RIM: [9, "x..x...x."] } },
-    { name: "Bunkergolv", bpm: 130, swing: 0.08, rumble: 0.9, t: { KICK: [16, "X...x...x...x..."], HAT: [16, "..x...x...x...x."], CLAP: [16, "....x.......x..."], PERC: [16, "................"], TOM: [8, "x.......", [0]], RIM: [13, "....x.....x.."] } },
-    { name: "Hypnos", bpm: 126, swing: 0.15, rumble: 0.45, t: { KICK: [16, "x...x...x...x..."], HAT: [16, "x.X.x.X.x.X.x.Xx"], CLAP: [16, "....x.......x..."], PERC: [13, "x..x..x.x..x.", [7, 9, 11, 7, 4]], TOM: [16, "................"], RIM: [7, "..x...x"] } },
+    { name: "Rullande Tunnel", kit: "Rullande Tunnel", bpm: 130, swing: 0.05, rumble: 0.8, t: { KICK: [16, "X...x...x...x..."], HAT: [16, "xx.xxx.xxx.xxx.X"], CLAP: [16, "................"], PERC: [16, "..x..x...x..x..x", [7, 9, 4]], TOM: [16, ".xxx.xxx.xxx.xxx", [0, 0, 0, 0, 0, 0, 7, 0]], RIM: [16, "...x.......x..x."] } },
+    { name: "Stålverk 140", kit: "Stålverk", bpm: 138, swing: 0, rumble: 0.95, t: { KICK: [16, "X...x...x...x..."], HAT: [16, "x.xXx.xXx.xXx.xX"], CLAP: [16, "....X.......X..."], PERC: [16, ".x..x..x...x..x.", [11, 12, 9]], TOM: [16, "x..x..x...x..x..", [0, 1, 0]], RIM: [16, "x..x..x..x..x..x"] } },
+    { name: "Dimhamn", kit: "Dimhamn", bpm: 124, swing: 0.08, rumble: 0.6, t: { KICK: [16, "x...x...x...x..."], HAT: [16, "..x...x...x...x."], CLAP: [16, "................"], PERC: [16, "..x.......x.....", [7, 9]], TOM: [16, "x.......x.......", [0, -1]], RIM: [12, "..x..x..x..x"] } },
+    { name: "Hypnos 128", kit: "Hypnos Minimal", bpm: 128, swing: 0.1, rumble: 0.5, t: { KICK: [16, "X...x...x...x..."], HAT: [16, "..x...x...x...x."], CLAP: [16, "................"], PERC: [8, "x..x..x.", [7, 4]], TOM: [16, "..x...x...x...xx", [0]], RIM: [16, "...x.......x..p."] } },
+    { name: "Varvet 1994", kit: "Varvet", bpm: 132, swing: 0.05, rumble: 0.75, t: { KICK: [16, "X...x...x...x..."], HAT: [16, "xx.xxx.xxx.xxx.X"], CLAP: [16, "....x.......x..."], PERC: [16, "..x..x...x..x..x", [7, 4, 9]], TOM: [16, ".xxx.xX..xxx.xx.", [0, 0, 7, 0, 0, 1, 0, 0, 7, 0]], RIM: [16, "..x.....x......."] } },
   ],
 };
 betong.tracks = [
@@ -1121,31 +1125,31 @@ const armering = {
   bpm: 132, drift: 0.3, trassel: 0.35, cutMul: 1, resMul: 1,
   note: "Demo: four synth tracks and a BETONG kick in your browser. ARMERING has eight waveforms, chords, LFOs, 2x oversampling and more knobs.",
   presets: [
-    { name: "Armeringsjärn", bpm: 132, drift: 0.3, trassel: 0.35,
-      A: [16, "X.xs.xX.x.sxx.X.", [0, 0, 7, 0, 2, 0, 1, 0, 4, 0, 0, 5], S("saw", 320, 0.82, 0.6, 0.26, 0.35, 0.55, 0.15, { acid: true })],
-      B: [13, "x..x..x.x..x.", [0, 0, -1, 2], S("reese", 170, 0.25, 0.25, 0.5, 0.3, 0.8, 0.05, { vol: 0.9 })],
-      C: [7, "x..x...", [0], S("super", 900, 0.3, 0.4, 0.18, 0.1, 0.25, 0.55, { chord: [3, 7, 10], vol: 0.5, rel: 0.12 }), 2],
-      D: [5, "x.x..", [7, 4], S("saw", 1400, 0.5, 0.5, 0.14, 0.2, 0.3, 0.5, { vol: 0.45 })] },
-    { name: "Syrabad 303", bpm: 134, drift: 0.2, trassel: 0.45,
-      A: [16, "XsxSxxsXxsxxSxsx", [0, 0, 7, 0, 8, 0, 3, 1, 0, 7, 0, 0, 5, 0, 2, 9], S("saw", 240, 0.95, 0.78, 0.28, 0.5, 0.55, 0.2, { acid: true })],
-      B: [14, "x.s.x..x.S.x..", [0, 0, 2, 4, 0, 1], S("square", 280, 0.85, 0.6, 0.22, 0.4, 0.55, 0.05, { acid: true, vol: 0.6 }), 2],
-      C: [16, "x...............", [0], S("saw", 1000, 0.3, 0.4, 0.1, 0.05, 0.15, 0.6, { chord: [3, 7], vol: 0.35 })],
-      D: [16, "....x.......x...", [7, 9], S("saw", 900, 0.8, 0.6, 0.16, 0.3, 0.4, 0.5, { acid: true, vol: 0.4 })] },
-    { name: "Tunnelbana", bpm: 130, drift: 0.35, trassel: 0.3,
-      A: [16, ".xxx.xxx.xxx.xX3", [0, 0, 7, 0, 0, 7, 0, 0, 7, 0, 3, 0], S("reese", 260, 0.4, 0.45, 0.16, 0.3, 0.5, 0.05)],
-      B: [8, "x.......", [0], S("super", 150, 0.3, 0.2, 0.4, 0.2, 0.85, 0.15, { vol: 0.5 }), 2],
-      C: [13, "..x.....x....", [0], S("saw", 700, 0.35, 0.35, 0.15, 0.1, 0.2, 0.75, { chord: [3, 7, 10, 14], vol: 0.45, rel: 0.2 })],
-      D: [11, "x..x....x..", [4, 7, 11], S("square", 1800, 0.4, 0.3, 0.1, 0.1, 0.2, 0.6, { vol: 0.3 })] },
-    { name: "Gummifabrik", bpm: 128, drift: 0.25, trassel: 0.3,
-      A: [16, "x.s.X.xs..x.S.x.", [0, 7, 7, 0, 0, 3, 5, 4, 0], S("square", 380, 0.55, 0.7, 0.14, 0.2, 0.5, 0.2)],
-      B: [12, "..x..x..x..x", [0, 0, -1, 0], S("square", 300, 0.4, 0.4, 0.2, 0.15, 0.5, 0.05, { vol: 0.7 })],
-      C: [16, "..........x.....", [0], S("saw", 900, 0.3, 0.5, 0.13, 0.05, 0.2, 0.6, { chord: [7], vol: 0.4 })],
-      D: [6, "x..x.p", [7, 4], S("saw", 2200, 0.3, 0.4, 0.09, 0, 0.2, 0.6, { vol: 0.35 })] },
-    { name: "Minus Plastik", bpm: 126, drift: 0.4, trassel: 0.4,
-      A: [15, "x..x...x..p.x..", [0, 0, 0, 1, 0], S("square", 260, 0.55, 0.35, 0.12, 0.1, 0.35, 0.4)],
-      B: [9, "x....x...", [0, -2], S("square", 150, 0.4, 0.2, 0.22, 0.15, 0.45, 0.1, { vol: 0.8 }), 2],
-      C: [11, "....x......", [0], S("saw", 1200, 0.2, 0.3, 0.12, 0, 0.15, 0.7, { chord: [3, 7, 10], vol: 0.35 })],
-      D: [5, "x..p.", [7, 9], S("saw", 2000, 0.45, 0.4, 0.08, 0, 0.15, 0.65, { vol: 0.3 })] },
+    { name: "Tunnelrullare", bpm: 130, drift: 0.25, trassel: 0.3,
+      A: [16, ".xxx.xxx.xxx.xxx", [0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0], S("reese", 210, 0.3, 0.4, 0.11, 0.3, 0.35, 0.05, { vol: 1 })],
+      B: [16, "x...............", [0], S("saw", 120, 0.2, 0.1, 0.4, 0.15, 1.0, 0, { vol: 0.6, rel: 0.08 })],
+      C: [5, "x....", [0], S("saw", 900, 0.25, 0.3, 0.15, 0, 0.15, 0.6, { chord: [3, 7, 10], vol: 0.4, rel: 0.26 }), 3],
+      D: [13, "x....x....x..", [7, 4, 9], S("saw", 2400, 0.5, 0.4, 0.07, 0, 0.1, 0.6, { vol: 0.3 })] },
+    { name: "Stålverk", bpm: 136, drift: 0.2, trassel: 0.35,
+      A: [16, "XxxXxxXxxXxxXxxX", [0, 0, 1, 0, 0, 7, 0, 0, 1, 0, 0, 7, 0, 0, 1, 0], S("saw", 300, 0.75, 0.6, 0.12, 0.85, 0.45, 0.1, { acid: true, vol: 0.9 })],
+      B: [16, "..x...x...x...x.", [0], S("reese", 180, 0.3, 0.25, 0.3, 0.7, 0.9, 0, { vol: 0.8 })],
+      C: [16, "....x.......x...", [0], S("super", 1200, 0.5, 0.5, 0.09, 0.6, 0.12, 0.3, { chord: [1, 5, 6], vol: 0.4 })],
+      D: [16, "x...............", [7], S("saw", 600, 0.4, 0.5, 0.12, 0.7, 0.15, 0.4, { vol: 0.3 })] },
+    { name: "Dimhamn", bpm: 124, drift: 0.3, trassel: 0.25,
+      A: [16, "x.......x..x....", [-7, -7, -8], S("square", 160, 0.25, 0.15, 0.3, 0.1, 0.6, 0.05, { vol: 0.9 })],
+      B: [16, "..x...x...x...x.", [0], S("square", 220, 0.3, 0.25, 0.18, 0.05, 0.35, 0.2, { vol: 0.5 })],
+      C: [16, "..x.....x..x....", [0, 0, 2], S("saw", 550, 0.4, 0.35, 0.18, 0.1, 0.12, 0.85, { chord: [3, 7, 10, 15], vol: 0.5, rel: 0.38 })],
+      D: [13, "....x........", [7], S("saw", 1600, 0.4, 0.4, 0.07, 0, 0.08, 0.8, { vol: 0.25 })] },
+    { name: "Hypnoshjul", bpm: 128, drift: 0.35, trassel: 0.4,
+      A: [16, ".x.x.x.x.x.x.x.x", [0, 0, 0, 0, 7, 0, 0, 2], S("square", 260, 0.65, 0.45, 0.1, 0.15, 0.3, 0.1)],
+      B: [12, "x..x..x..x..", [0, -1], S("square", 140, 0.3, 0.2, 0.3, 0.1, 0.9, 0, { vol: 0.55 })],
+      C: [11, "x..........", [0], S("super", 650, 0.3, 0.3, 0.16, 0.05, 0.12, 0.7, { chord: [7, 10, 15], vol: 0.4, rel: 0.3 })],
+      D: [7, "x.x.x..", [7, 9, 11], S("saw", 1800, 0.45, 0.4, 0.06, 0, 0.1, 0.55, { vol: 0.3 })] },
+    { name: "Varvet 1994", bpm: 132, drift: 0.3, trassel: 0.35,
+      A: [16, ".xxx.xX..xxx.xx.", [0, 0, 7, 0, 0, 1, 0, 0, 7, 0, 0], S("reese", 240, 0.7, 0.5, 0.12, 0.5, 0.35, 0.1, { acid: true, vol: 0.95 })],
+      B: [13, "x...x...x...x", [0, 0, -1, 0], S("square", 130, 0.3, 0.2, 0.35, 0.3, 0.9, 0, { vol: 0.55 })],
+      C: [13, "..x.....x....", [0], S("saw", 600, 0.4, 0.35, 0.17, 0.2, 0.12, 0.8, { chord: [3, 7, 10, 14], vol: 0.45, rel: 0.32 })],
+      D: [11, "x..x....x..", [7, 8, 11], S("saw", 2000, 0.5, 0.4, 0.06, 0.3, 0.1, 0.6, { vol: 0.28 })] },
   ],
 };
 armering.tracks = [
@@ -1164,7 +1168,10 @@ armering.load = function (i) {
   this.presetBtns.forEach((b, k) => b.classList.toggle("on", k === i));
   this.cur = i; if (this.liveKnobs) syncKnobs(this); this.draw();
 };
-armering.onStart = () => armering.tracks.forEach(t => t.dest = master);
+armering.onStart = () => {
+  if (!synthBus) { synthBus = ctx.createGain(); synthBus.connect(master); }
+  armering.tracks.forEach(t => t.dest = t.key === "K" ? master : synthBus);
+};
 // ur takt: varje spår svajar runt takten, kicken står still
 armering.offset = (t, dur) => { if (!t.anchor) return 0; t.dph += t.dsp * (0.4 + armering.drift); return Math.sin(t.dph) * armering.drift * t.anchor * dur * 0.42; };
 // trassel: muterar ett steg per varv, och reder ut hälften av gångerna
