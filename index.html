@@ -311,7 +311,7 @@ footer{border-top:1px solid var(--ln);padding-block:28px 40px;display:flex;justi
 <script>
 "use strict";
 /* ===== Butikslänkar: fylls i när Payhip är uppsatt ===== */
-const SHOP = { betong: "https://payhip.com/b/PTUjK", armering: "https://payhip.com/b/9sdaF", fukt: "https://payhip.com/b/tkMjU", betongFukt: "", armeringFukt: "", alla: "" };
+const SHOP = { betong: "https://payhip.com/b/PTUjK", armering: "https://payhip.com/b/9sdaF", fukt: "https://payhip.com/b/tkMjU", betongFukt: "", armeringFukt: "", alla: "https://payhip.com/b/Ieavx" };
 document.querySelectorAll("[data-buy]").forEach(a => {
   const url = SHOP[a.dataset.buy];
   if (url) { a.href = url; a.target = "_blank"; a.rel = "noopener"; }
